@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
 import Signup from "./views/Signup";
 import Login from "./views/Login";
 import LocationTracking from "./views/LocationTracking";
 import Dashboard from "./views/Dashboard";
+import GuestLayout from "./components/GuestLayout";
 
 const router = createBrowserRouter([
     {
@@ -15,13 +15,20 @@ const router = createBrowserRouter([
         element: <LocationTracking />
     },
     {
-        path: '/login',
-        element: <Login />
+        path: '/',
+        element: <GuestLayout />,
+        children: [
+            {
+                path: '/login',
+                element: <Login />
+            },
+            {
+                path: '/signup',
+                element: <Signup />
+            },
+        ]
     },
-    {
-        path: '/signup',
-        element: <Signup/>
-    }
+
 ])
 
 export default router;
