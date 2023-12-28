@@ -1,12 +1,14 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import Signup from "./views/Signup";
 import Login from "./views/Login";
 import LocationTracking from "./views/LocationTracking";
 import Dashboard from "./views/Dashboard";
 import GuestLayout from "./components/GuestLayout";
 import DefaultLayout from "./components/DefaultLayout";
+import Reservation from "./views/Reservation";
 
 const router = createBrowserRouter([
+
 
     {
         path: '/',
@@ -17,9 +19,17 @@ const router = createBrowserRouter([
                 element: <Dashboard />
             },
             {
+                path: '/dashboard',
+                element: <Navigate to="/" />
+            },
+            {
                 path: '/locationtracking',
                 element: <LocationTracking />
             },
+            {
+                path: '/reservation',
+                element: <Reservation/>
+            }
         ]
     },
 
