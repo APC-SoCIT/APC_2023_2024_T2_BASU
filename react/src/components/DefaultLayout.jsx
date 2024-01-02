@@ -1,24 +1,20 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { NavLink, Navigate, Outlet } from 'react-router-dom'
+import { userStateContext } from '../contexts/ContextProvider'
 
+// This will be the layout for Authorize Users
+//
+//
+//
+//
 
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 const navigation = [
   { name: 'Dashboard', to: '/'},
   { name: 'Shuttle Location', to: '/locationtracking'},
   { name: 'Reservation', to: 'reservation',},
 
-]
-const userNavigation = [
-  { name: 'Sign out', href: '#' },
 ]
 
 function classNames(...classes) {
@@ -26,6 +22,11 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
+  const {currentUser, userToken} = userStateContext();
+
+  if (!userToken) {
+    return <Navigate to='login' />
+  }
 
   const logout = (ev) => {
     ev.preventDefault();
@@ -79,7 +80,7 @@ export default function DefaultLayout() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src="./images/basu_logo.png" alt="Profile Icon" />
+                            <UserIcon className="w-8 text-white"/>
                           </Menu.Button>
                         </div>
                         <Transition
@@ -103,7 +104,7 @@ export default function DefaultLayout() {
 
                                       as="a"
                                   >
-                                    Sign out
+                                    Sign Out
                                   </a>                                
                               </Menu.Item>
                             
@@ -146,11 +147,11 @@ export default function DefaultLayout() {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <UserIcon className="w-8 text-white"/>
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>
+                      <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
                     </div>
                     <button
                       type="button"
@@ -170,7 +171,7 @@ export default function DefaultLayout() {
                         onClick={(ev) => logout(ev)}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
-                        Sign out
+                        Sign Out                  
                       </Disclosure.Button>
                     ))
                   </div>
