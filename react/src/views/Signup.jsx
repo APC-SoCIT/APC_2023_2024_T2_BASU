@@ -166,7 +166,7 @@ export default function Signup() {
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password-confirmation" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password Confirmation
+                  Confirm Password
                 </label>
               </div>
               <div className="mt-2">
