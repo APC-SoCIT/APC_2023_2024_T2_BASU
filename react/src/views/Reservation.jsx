@@ -1,6 +1,6 @@
 import PageComponent from "../components/PageComponent";
 
-export default function LocationTracking() {
+export default function Reservation() {
    return (
     <PageComponent title="Reservation">
       Reservation Content

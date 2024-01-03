@@ -1,9 +1,9 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { userStateContext } from '../contexts/ContextProvider';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function GuestLayout() {
-  const {currentUser, userToken} = userStateContext();
+  const {currentUser, userToken} = useStateContext();
 
   if (userToken) {
     return <Navigate to= "/" />
@@ -23,6 +23,6 @@ export default function GuestLayout() {
         </div>
       </div>
     </div>
-    
+
   )
 }

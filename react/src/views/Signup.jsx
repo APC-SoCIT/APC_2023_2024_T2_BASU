@@ -3,7 +3,6 @@ import { useState } from "react";
 import axiosClient from '../axios.js'
 
 export default function Signup() {
-  // const { setCurrentUser, setUserToken } = useStateContext();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,37 +35,6 @@ export default function Signup() {
       });
   };
 
-// import { useState } from "react";
-// import { Link } from "react-router-dom";
-// import axiosClient from '../axios.js'
-
-
-// export default function Signup() {
-//   const [fullName, setFullName] = useState('');
-//   // const [lastName, setLastName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-//   const [error, setError] = useState({ __html: "" });
-
-//   const onSubmit = (ev) => {
-//     ev.preventDefault();
-//     setError({ __html: "" })
-
-//     axiosClient.post('/signup', {
-//       name: fullName,
-//       email,
-//       password,
-//       password_confirmation: passwordConfirmation,
-//     })
-//       .then(({ data }) => {
-//         console.log(data);
-//       })
-//     .catch(({ error }) => {
-//         console.log(error);
-//       });
-//   };
-
   return (
     <>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -94,38 +62,6 @@ export default function Signup() {
                 />
               </div>
             </div>
-
-          {/* <div>
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                First Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="first-name"
-                  name="name"
-                  type="text"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="APC Student First Name"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
-                Last Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="last-name"
-                  name="name"
-                  type="text"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="APC Student Last Name"
-                />
-              </div>
-            </div> */}
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -181,24 +117,6 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* <div>
-              <label htmlFor="contact" className="block text-sm font-medium leading-6 text-gray-900">
-                Contact Address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="contact"
-                  name="contact"
-                  type="text"
-                  autoComplete="contact"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div> */}
-
-
-
             <div>
               <button
                 type="submit"
@@ -216,10 +134,7 @@ export default function Signup() {
               >
                 Login with your account
               </Link>
-      </p>
-
-
-
+           </p>
           </form>
         </div>
     </>

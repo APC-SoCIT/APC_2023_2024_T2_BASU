@@ -1,19 +1,15 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
-import { userStateContext } from '../contexts/ContextProvider'
+import { useStateContext } from '../contexts/ContextProvider'
 
 // This will be the layout for Authorize Users
-//
-//
-//
-//
 
 const navigation = [
   { name: 'Dashboard', to: '/'},
   { name: 'Shuttle Location', to: '/locationtracking'},
-  { name: 'Reservation', to: 'reservation',},
+  { name: 'Reservation', to: '/reservation',},
 
 ]
 
@@ -22,7 +18,7 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
-  const {currentUser, userToken} = userStateContext();
+  const {currentUser, userToken} = useStateContext();
 
   if (!userToken) {
     return <Navigate to='login' />
@@ -72,7 +68,7 @@ export default function DefaultLayout() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      
+
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
@@ -93,21 +89,19 @@ export default function DefaultLayout() {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            
+
                               <Menu.Item>
-                                
+
                                   <a
                                     href="#"
                                     onClick={(ev) => logout(ev)}
-                                    className={                 
+                                    className={
                                       'block px-4 py-2 text-sm text-gray-700'}
-
-                                      as="a"
                                   >
                                     Sign Out
-                                  </a>                                
+                                  </a>
                               </Menu.Item>
-                            
+
                           </Menu.Items>
                         </Transition>
                       </Menu>
@@ -134,11 +128,10 @@ export default function DefaultLayout() {
                     <NavLink
                       key={item.name}
                       to={item.to}
-                      className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      className={({ isActive }) => classNames(
+                        isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'block rounded-md px-3 py-2 text-base font-medium'
                       )}
-                      aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
                     </NavLink>
@@ -159,21 +152,20 @@ export default function DefaultLayout() {
                     >
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">View notifications</span>
-                      
+
                     </button>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
-                    
+
                       <Disclosure.Button
-                        
+
                         as="a"
                         href="#"
                         onClick={(ev) => logout(ev)}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
-                        Sign Out                  
+                        Sign Out
                       </Disclosure.Button>
-                    ))
                   </div>
                 </div>
               </Disclosure.Panel>
