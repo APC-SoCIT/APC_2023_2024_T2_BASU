@@ -18,9 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/reservations', [ReservationController::class, 'store']);
 Route::get('/location', 'LocationController@getLocation');
+
+
 Route::post('/account/register', [AuthController::class, 'register']);
 Route::post('/signup', [AuthController::class,'signup']);
 Route::post('/login', [AuthController::class,'login']);
+
+
 Route::get('/accounts', [AuthController::class, 'getAccounts']);
 Route::delete('/accounts/{id}', [AuthController::class, 'deleteAccount']);
 Route::put('/accounts/{id}', [AuthController::class, 'updateAccount']);

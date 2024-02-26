@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegistrationRequest;
 use Illuminate\Support\Facades\Validator;
 
+
 class AuthController extends Controller
 {
     // User registration
@@ -23,7 +24,7 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'role' => 'admin', // Set the role to admin
+            'role' => $data['role'],
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
@@ -145,5 +146,4 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Account details updated successfully', 'account' => $account]);
     }
-
 }

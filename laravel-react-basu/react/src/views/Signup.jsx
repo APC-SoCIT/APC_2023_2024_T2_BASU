@@ -1,8 +1,6 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import axiosClient from "../axios.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
-import PageComponent from "../components/PageComponent.jsx";
 
 export default function Signup() {
   const { setCurrentUser, setUserToken } = useStateContext();
@@ -35,6 +33,9 @@ export default function Signup() {
         setEmail("");
         setPassword("");
         setPasswordConfirmation("");
+
+        setCurrentUser(data.user);
+        setUserToken(data.token);
       })
       .catch((error) => {
         if (error.response) {
@@ -54,7 +55,6 @@ export default function Signup() {
   };
 
   return (
-    <PageComponent title={"Admin Registration"}>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign-Up Here
@@ -191,6 +191,5 @@ export default function Signup() {
           </div>
         )}
       </div>
-    </PageComponent>
   );
 }
