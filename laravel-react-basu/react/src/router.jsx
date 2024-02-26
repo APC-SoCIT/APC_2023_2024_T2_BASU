@@ -12,8 +12,47 @@ import ReservationPublicView from "./views/ReservationPublicView";
 import Role from "./views/Role";
 import AccountRegister from "./views/AccountRegister";
 import AccountList from "./views/AccountList";
-import PageComponent from "./components/PageComponent";
 import PageNotFound from "./views/PageNotFound";
+import { useStateContext } from "./contexts/ContextProvider";
+
+
+
+{/*ROUTE GUARDS*/}
+// Route guard for admin-only routes
+export const AdminRouteGuard = ({ children }) => {
+  const { currentUser } = useStateContext();
+
+  if (currentUser.role !== '1') {
+    // Redirect to a different route if not admin
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
+};
+
+// Route guard for student-only routes
+export const StudentRouteGuard = ({ children }) => {
+  const { currentUser } = useStateContext();
+
+  if (currentUser.role !== '2') {
+    // Redirect to a different route if not a student
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
+};
+
+// Route guard for driver-only routes
+export const DriverRouteGuard = ({ children }) => {
+  const { currentUser } = useStateContext();
+
+  if (currentUser.role !== '3') {
+    // Redirect to a different route if not a driver
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
+};
 
 const router = createBrowserRouter([
   {
@@ -22,7 +61,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <Navigate to="/" />,
+        element: <AdminRouteGuard> <Navigate to="/"/> </AdminRouteGuard>,
       },
       {
         path: "/",
@@ -30,7 +69,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/reservation",
-        element: <Reservation />,
+        element:<AdminRouteGuard> <Reservation /> </AdminRouteGuard>,
       },
       {
         path: "/reservation/create",
@@ -53,7 +92,7 @@ const router = createBrowserRouter([
         element: <Role />,
       },
       {
-        path: "/account/",
+        path: "/account",
         element: <AccountList />,
       },
     ],

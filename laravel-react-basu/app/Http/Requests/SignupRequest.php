@@ -29,7 +29,7 @@ class SignupRequest extends FormRequest
             'role' => [
                 'required',
                 'string',
-                Rule::in(['Student', 'Driver', 'Admin']),
+                Rule::in(['1', '2', '3']), //Admin-1, Student-2, Driver-3
             ],
             'password' => [
                 'required',

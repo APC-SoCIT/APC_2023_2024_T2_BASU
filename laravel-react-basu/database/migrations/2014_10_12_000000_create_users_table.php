@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('admin'); // Set default role to 'admin'
+            $table->integer('role'); // Admin-1, Student-2 Driver-3
             $table->rememberToken();
             $table->timestamps();
         });

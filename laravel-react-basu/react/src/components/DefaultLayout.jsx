@@ -1,15 +1,10 @@
 import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  UserIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios";
 import Footer from "./Footer";
-
 
 const navigation = [
   { name: "Dashboard", to: "/" },
@@ -44,15 +39,30 @@ export default function DefaultLayout() {
     })
   }, [])
 
+  // Define navigation items based on user's role
+  const filteredNavigation = navigation.filter((item) => {
+    if (currentUser.role === '1') {
+      return true; // Admin can see all navigation items
+    } else if (currentUser.role === '2' && item.name !== 'Accounts') {
+      return true; // Students can see all except Accounts
+    } else if (currentUser.role === '3' && item.name !== 'Reservation') {
+      return true; // Drivers can see all except Reservation
+    }
+    return false; // Other roles won't see any extra items
+  });
+
   return (
     <>
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
+              {/* Navigation Header */}
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
+                  {/* Logo */}
                   <div className="flex items-center">
+                    {/* Logo Image */}
                     <div className="flex-shrink-0">
                       <img
                         className="h-8 w-8"
@@ -60,9 +70,10 @@ export default function DefaultLayout() {
                         alt="tailwind"
                       />
                     </div>
+                    {/* Desktop Navigation Links */}
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
+                        {filteredNavigation.map((item) => (
                           <NavLink
                             key={item.name}
                             to={item.to}
@@ -81,15 +92,17 @@ export default function DefaultLayout() {
                       </div>
                     </div>
                   </div>
+                  {/* Profile Dropdown */}
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
+                        {/* Profile Button */}
                         <div>
                           <Menu.Button className="relative flex items-center max-w-xs rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <UserIcon className="w-12 h-12 bg-black/25 p-2 rounded-full text-white hover:focus:ring-white" />
                           </Menu.Button>
                         </div>
+                        {/* Profile Dropdown Menu */}
                         <Transition
                           as={Fragment}
                           enter="transition ease-out duration-100"
@@ -100,16 +113,19 @@ export default function DefaultLayout() {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-60 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <Menu.Item className="bg-slate-600">
+                            {/* User Information */}
+                            <Menu.Item className="bg-slate-600">
                               <div className="block px-4 py-4 text-sm text-white">
                                 Welcome | {currentUser.name}
                               </div>
                             </Menu.Item>
+                            {/* Divider */}
                             <Menu.Item className="bg-slate-200">
                               <div className="block px-4 py-1 text-sm text-black">
-
+                                {/* Additional menu items */}
                               </div>
                             </Menu.Item>
+                            {/* Logout Button */}
                             <Menu.Item>
                               <a
                                 href="#"
@@ -124,8 +140,8 @@ export default function DefaultLayout() {
                       </Menu>
                     </div>
                   </div>
+                  {/* Mobile Menu Button */}
                   <div className="-mr-2 flex md:hidden">
-                    {/* Mobile menu button */}
                     <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-0.5" />
                       <span className="sr-only">Open main menu</span>
@@ -144,10 +160,10 @@ export default function DefaultLayout() {
                   </div>
                 </div>
               </div>
-
+              {/* Mobile Navigation Menu */}
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                  {navigation.map((item) => (
+                  {filteredNavigation.map((item) => (
                     <NavLink
                       key={item.name}
                       as="a"
@@ -180,6 +196,7 @@ export default function DefaultLayout() {
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
+                    {/* Logout Button */}
                     <Disclosure.Button
                       as="a"
                       href="#"
@@ -194,9 +211,9 @@ export default function DefaultLayout() {
             </>
           )}
         </Disclosure>
-
+        {/* Render Child Components */}
         <Outlet />
-
+        {/* Footer Component */}
         <Footer />
       </div>
     </>
