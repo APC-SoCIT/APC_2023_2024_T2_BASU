@@ -24,6 +24,7 @@ export const ContextProvider = ({ children }) => {
   const [questionTypes] = useState(['text', "select", "radio", "checkbox", "textarea"])
   const [toast, setToast] = useState({message: '', show: false})
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [role, setRole] = useState(null);
 
   const setUserToken = (token) => {
     if (token) {
@@ -74,6 +75,8 @@ export const ContextProvider = ({ children }) => {
         currentLocation,
         updateLocation,
         getLocation,
+        role,
+        setRole,
       }}
     >
       {children}

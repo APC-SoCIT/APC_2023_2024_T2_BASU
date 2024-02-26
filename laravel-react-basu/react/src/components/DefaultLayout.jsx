@@ -172,7 +172,7 @@ export default function DefaultLayout() {
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {currentUser.name}
+                        {currentUser.name} {currentUser.role}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
                         {currentUser.email}

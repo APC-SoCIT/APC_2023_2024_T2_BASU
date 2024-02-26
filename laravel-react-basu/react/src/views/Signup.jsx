@@ -3,7 +3,7 @@ import axiosClient from "../axios.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 
 export default function Signup() {
-  const { setCurrentUser, setUserToken } = useStateContext();
+  const { setCurrentUser, setUserToken, setRole } = useStateContext();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +36,7 @@ export default function Signup() {
 
         setCurrentUser(data.user);
         setUserToken(data.token);
+        setRole(data.role);
       })
       .catch((error) => {
         if (error.response) {
