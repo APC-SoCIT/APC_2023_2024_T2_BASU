@@ -20,8 +20,12 @@ const navigation = [
   { name: "Home", to: "/", icon: HomeIcon },
   { name: "Dashboard", to: "/dashboard", icon: ChartBarSquareIcon },
   { name: "Reservation", to: "/reservation", icon: BookmarkSquareIcon },
-  { name: "Inquire Reservation", to: "/reservation", icon: BookmarkSquareIcon },
-  { name: "Start Service", to: "/locationtrack", icon: MapPinIcon },
+  {
+    name: "Inquire Reservation",
+    to: "/inquire/reservation",
+    icon: BookmarkSquareIcon,
+  },
+  { name: "Start Service", to: "/startservice", icon: MapPinIcon },
   { name: "Shuttle Tracker", to: "/locationtrack", icon: MapPinIcon },
   { name: "Accounts", to: "/users", icon: UserCircleIcon },
 ];
@@ -58,15 +62,27 @@ export default function DefaultLayout() {
   }, []);
 
   // Define navigation items based on user's role
+  // Define navigation items based on user's role
   const filteredNavigation = navigation.filter((item) => {
     if (currentUser.role === "1") {
-      return true; // Admin can see all navigation items
-    } else if (currentUser.role === "2" && item.name !== "Accounts") {
-      return true; // Students can see all except Accounts
-    } else if (currentUser.role === "3" && item.name !== "Reservation") {
-      return true; // Drivers can see all except Reservation
+      // Admin
+      return [
+        "Home",
+        "Dashboard",
+        "Reservation",
+        "Shuttle Tracker",
+        "Accounts",
+      ].includes(item.name);
+    } else if (currentUser.role === "2") {
+      // Student
+      return ["Home", "Inquire Reservation", "Shuttle Tracker"].includes(
+        item.name
+      );
+    } else if (currentUser.role === "3") {
+      // Driver
+      return ["Home", "Start Service", "Shuttle Tracker"].includes(item.name);
     }
-    return false; // Other roles won't see any extra items
+    return false; // Other roles won't see any navigation items
   });
 
   return (
