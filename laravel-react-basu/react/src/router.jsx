@@ -14,6 +14,8 @@ import AccountRegister from "./views/AccountRegister";
 import AccountList from "./views/AccountList";
 import PageNotFound from "./views/PageNotFound";
 import { useStateContext } from "./contexts/ContextProvider";
+import Admin from "./views/Admin";
+import ReservationForm from "./views/ReservationForm";
 
 
 
@@ -61,27 +63,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <AdminRouteGuard> <Navigate to="/"/> </AdminRouteGuard>,
+        element:  <Navigate to="/"/>,
       },
       {
         path: "/",
         element: <Dashboard />,
       },
       {
-        path: "/reservation",
-        element:<AdminRouteGuard> <Reservation /> </AdminRouteGuard>,
-      },
-      {
-        path: "/reservation/create",
-        element: <ReservationView />,
-      },
-      {
-        path: "/reservation/:id",
-        element: <ReservationView />,
+        path: "/admin",
+        element: <Admin />,
       },
       {
         path: "/locationtrack",
-        element: <LocationTrack />,
+        element: <LocationTrack /> ,
       },
       {
         path: "/account/register",
@@ -93,10 +87,25 @@ const router = createBrowserRouter([
       },
       {
         path: "/account",
-        element: <AccountList />,
+        element:  <AccountList /> ,
+      },
+      {
+        path: "/reservation",
+        element:  <Reservation /> ,
+      },
+      {
+        path: "/reservation/create",
+        element:  <ReservationForm />,
+      },
+      {
+        path: "/locationtrack",
+        element:  <LocationTrack />,
       },
     ],
   },
+
+
+
   {
     path: "/",
     element: <GuestLayout />,

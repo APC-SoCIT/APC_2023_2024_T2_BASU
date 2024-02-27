@@ -7,8 +7,12 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("TOKEN");
+  const role = localStorage.getItem("ROLE");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+  if (role) {
+    config.headers.Role = role; // Set role in headers if available
   }
   return config;
 });
@@ -20,6 +24,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem("TOKEN");
+      localStorage.removeItem("ROLE");
       router.navigate("/login");
     }
     return Promise.reject(error); // Reject all other errors

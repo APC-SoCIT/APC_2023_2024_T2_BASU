@@ -5,6 +5,7 @@ import { createContext } from "react";
 const StateContext = createContext({
   currentUser: {},
   userToken: null,
+  role: null,
   reservations: [],
   questionTypes: [],
   toast: {
@@ -14,17 +15,18 @@ const StateContext = createContext({
   setCurrentUser: () => {},
   setUserToken: () => {},
   getLocation: () => {},
+  setRole: () => {},
 });
 
 
 export const ContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
   const [userToken, _setUserToken] = useState(localStorage.getItem('TOKEN') || '');
+  const [role, _setRole] = useState(localStorage.getItem('ROLE') || '');
   const [reservations, setReservations] = useState()
   const [questionTypes] = useState(['text', "select", "radio", "checkbox", "textarea"])
   const [toast, setToast] = useState({message: '', show: false})
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [role, setRole] = useState(null);
 
   const setUserToken = (token) => {
     if (token) {
@@ -34,6 +36,15 @@ export const ContextProvider = ({ children }) => {
     }
     _setUserToken(token);
   }
+
+  const setRole = (role) => {
+    if (role) {
+      localStorage.setItem('ROLE', role);
+    } else {
+      localStorage.removeItem('ROLE');
+    }
+    _setRole(role);
+  };
 
   const showToast = (message) => {
     setToast({ message, show: true })

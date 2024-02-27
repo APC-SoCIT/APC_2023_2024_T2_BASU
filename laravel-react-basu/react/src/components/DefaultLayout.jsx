@@ -1,16 +1,25 @@
 import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftEndOnRectangleIcon,
+  Bars3Icon,
+  BookmarkSquareIcon,
+  ChartBarSquareIcon,
+  MapPinIcon,
+  UserCircleIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { NavLink, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios";
 import Footer from "./Footer";
 
 const navigation = [
-  { name: "Dashboard", to: "/" },
-  { name: "Reservation", to: "/reservation" },
-  { name: "Shuttle Tracker", to: "/locationtrack" },
-  { name: "Accounts", to: "/account" },
+  { name: "Dashboard", to: "/", icon: ChartBarSquareIcon },
+  { name: "Reservation", to: "/reservation", icon: BookmarkSquareIcon },
+  { name: "Shuttle Tracker", to: "/locationtrack", icon: MapPinIcon },
+  { name: "Accounts", to: "/account", icon: UserCircleIcon },
 ];
 
 function classNames(...classes) {
@@ -34,18 +43,23 @@ export default function DefaultLayout() {
   };
 
   useEffect(() => {
-    axiosClient.get("/me").then(({ data }) => {
-      setCurrentUser(data)
-    })
-  }, [])
+    axiosClient
+      .get("/me")
+      .then(({ data }) => {
+        setCurrentUser(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch user data:", error);
+      });
+  }, []);
 
   // Define navigation items based on user's role
   const filteredNavigation = navigation.filter((item) => {
-    if (currentUser.role === '1') {
+    if (currentUser.role === "1") {
       return true; // Admin can see all navigation items
-    } else if (currentUser.role === '2' && item.name !== 'Accounts') {
+    } else if (currentUser.role === "2" && item.name !== "Accounts") {
       return true; // Students can see all except Accounts
-    } else if (currentUser.role === '3' && item.name !== 'Reservation') {
+    } else if (currentUser.role === "3" && item.name !== "Reservation") {
       return true; // Drivers can see all except Reservation
     }
     return false; // Other roles won't see any extra items
@@ -65,9 +79,9 @@ export default function DefaultLayout() {
                     {/* Logo Image */}
                     <div className="flex-shrink-0">
                       <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="tailwind"
+                        className="h-12 w-12"
+                        src="/images/basu-icon-transparent.png"
+                        alt="BASU Icon"
                       />
                     </div>
                     {/* Desktop Navigation Links */}
@@ -86,6 +100,7 @@ export default function DefaultLayout() {
                               )
                             }
                           >
+                            <item.icon className="h-5 w-5 inline-block mr-2" />
                             {item.name}
                           </NavLink>
                         ))}
@@ -177,6 +192,7 @@ export default function DefaultLayout() {
                         )
                       }
                     >
+                      <item.icon className="h-5 w-5 inline-block mr-2" />
                       {item.name}
                     </NavLink>
                   ))}
@@ -201,8 +217,9 @@ export default function DefaultLayout() {
                       as="a"
                       href="#"
                       onClick={(ev) => logout(ev)}
-                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                      className="rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white flex items-center"
                     >
+                      <ArrowLeftEndOnRectangleIcon className="h-5 w-5 mr-2" />
                       Sign Out
                     </Disclosure.Button>
                   </div>

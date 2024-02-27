@@ -90,7 +90,7 @@ const ReservationForm = () => {
 
   return (
 
-    <div className="container mx-auto mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="container mx-auto mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
       <form
         onSubmit={handleSubmit}
         className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md"
