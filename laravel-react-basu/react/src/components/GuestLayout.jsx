@@ -14,7 +14,7 @@ export default function GuestLayout() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-50 w-auto"
-            src="./images/basu_logo.png"
+            src="/images/basu_logo.png"
             alt="BASU Logo"
           />
           <Outlet />

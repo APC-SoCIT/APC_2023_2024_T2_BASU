@@ -7,10 +7,10 @@ import Signup from "./views/Signup";
 import GuestLayout from "./components/GuestLayout";
 import DefaultLayout from "./components/DefaultLayout";
 import LocationTrack from "./views/LocationTrack";
-import ReservationView from "./views/ReservationView";
+// import ReservationView from "./views/ReservationView";
 import ReservationPublicView from "./views/ReservationPublicView";
 import Role from "./views/Role";
-import AccountRegister from "./views/AccountRegister";
+import AccountRegister from "./admin/AccountRegister";
 import AccountList from "./views/AccountList";
 import PageNotFound from "./views/PageNotFound";
 import { useStateContext } from "./contexts/ContextProvider";
@@ -100,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: "/locationtrack",
         element:  <LocationTrack />,
+      },
+      {
+        path: "/account/register",
+        element:  <AccountRegister />,
       },
     ],
   },
