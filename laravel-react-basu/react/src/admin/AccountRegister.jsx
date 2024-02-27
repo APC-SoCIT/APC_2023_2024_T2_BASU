@@ -2,11 +2,7 @@ import { useState } from "react";
 import axiosClient from "../axios.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 import {
-  AcademicCapIcon,
   ChevronDoubleLeftIcon,
-  QuestionMarkCircleIcon,
-  UserCircleIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 import PageComponent from "../components/PageComponent.jsx";
 import TButton from "../components/core/TButton.jsx";

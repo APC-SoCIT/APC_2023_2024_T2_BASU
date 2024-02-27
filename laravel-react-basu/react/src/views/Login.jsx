@@ -57,7 +57,7 @@ export default function Login() {
       </div>
       <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-blue-900">
-          Log-in to BASU Administrator
+          Log-in to BASU | APC
         </h2>
         <input type="hidden" name="remember" defaultValue="true" />
         <div>
@@ -116,12 +116,12 @@ export default function Login() {
       </form>
 
       <p className="mt-10 text-center text-sm text-gray-500">
-        Forgot Admin Credentials?{" "}
+        Dont have an account?{" "}
         <Link
-          to=""
+          to="/signup"
           className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
         >
-          Contact APPTECH
+          Register Here!
         </Link>
       </p>
     </>

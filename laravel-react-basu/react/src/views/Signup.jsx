@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axiosClient from "../axios.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
-  const { setCurrentUser, setUserToken} = useStateContext();
+  const { setCurrentUser, setUserToken } = useStateContext();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,9 +14,19 @@ export default function Signup() {
   const [showNotification, setShowNotification] = useState(false); // State to control the visibility of the notification
   const [role, setRole] = useState("");
 
+  const validateEmail = (email) => {
+    const pattern = /^[a-zA-Z0-9._%+-]+@student\.apc\.edu\.ph$/;
+    return pattern.test(email);
+  };
+
   const onSubmit = (ev) => {
     ev.preventDefault();
     setError({ __html: "" });
+
+    if (!validateEmail(email)) {
+      setError({ __html: "You need to use APC domain @student.apc.edu.ph" });
+      return;
+    }
 
     // Disable the button and set loading state
     setLoading(true);
@@ -60,7 +71,7 @@ export default function Signup() {
   return (
     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Sign-Up Here
+        Register a BASU Account Here!
       </h2>
 
       {error.__html && (
@@ -71,23 +82,28 @@ export default function Signup() {
       )}
 
       <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
-        <label
-          htmlFor="role"
-          className="block text-sm font-medium leading-6 text-gray-900"
-        >
-          Role
-        </label>
-        <select
-          id="role"
-          name="role"
-          className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          value={role}
-          onChange={(ev) => setRole(ev.target.value)}
-        >
-          <option value="2">Student</option>
-          <option value="3">Driver</option>
-          <option value="1">Admin</option>
-        </select>
+        <fieldset className="border border-gray-400 rounded-md p-2 mt-4">
+          <label
+            htmlFor="full-name"
+            className="block text-bold underline font-medium leading-6 text-gray-900 mb-2 text-center"
+          >
+            Choose Account:
+          </label>
+          <div className="flex items-center justify-center space-x-4">
+            <div className="flex items-center font-mono">
+              <input
+                id="student"
+                type="radio"
+                className="h-4 w-4 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 text-indigo-600"
+                checked={role === "2"}
+                onChange={() => setRole("2")}
+              />
+              <label htmlFor="student" className="ml-2 text-sm text-gray-900">
+                Student Account
+              </label>
+            </div>
+          </div>
+        </fieldset>
         <div>
           <label
             htmlFor="full-name"
@@ -184,10 +200,19 @@ export default function Signup() {
                 : "bg-blue-600 hover:bg-blue-500"
             } px-3 py-1.5 text-sm font-semibold leading-10 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
           >
-            {loading ? "Registering..." : "Register"}
+            {loading ? "Registering..." : "Submit"}
           </button>
         </div>
       </form>
+      <p className="mt-10 text-center text-sm text-gray-500">
+        Already have an Account?{" "}
+        <Link
+          to="/login"
+          className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+        >
+          Login Here!
+        </Link>
+      </p>
       {/* Notification Modal */}
       {showNotification && (
         <div className="fixed inset-0 flex items-center justify-center z-50">

@@ -49,7 +49,7 @@ export default function LandingPage() {
               <p className="mt-10 text-xl text-gray-500 font-mono">
                 A digitized system for Students, Faculty, and Shuttle Service
                 Administrators of{" "}
-                <span className="block text-yellow-500 font-bold underline text-3xl sm:text-3xl">
+                <span className="block text-yellow-500 font-bold underline text-3xl sm:text-1xl">
                   Asia Pacific College
                 </span>
               </p>
