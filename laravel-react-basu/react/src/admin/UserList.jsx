@@ -1,20 +1,40 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../axios";
 import PageComponent from "../components/PageComponent";
-import { CircularProgress, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
+import {
+  CircularProgress,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import TButton from "../components/core/TButton";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import Person2Icon from "@mui/icons-material/Person2";
 import FlightClassIcon from "@mui/icons-material/FlightClass";
 import UserSearch from "../styling/UserSearch";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filterRole, setFilterRole] = useState(null); // New state for filtering role
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null); // New state to store the user ID to delete
 
   useEffect(() => {
     setLoading(true);
@@ -55,6 +75,47 @@ export default function UserList() {
     setFilteredUsers(filtered);
   };
 
+  // Function to handle role filtering
+  const handleRoleFilter = (role) => {
+    if (role === filterRole) {
+      setFilterRole(null); // Clear filter if clicked again
+      setFilteredUsers(users); // Reset filtered users
+    } else {
+      const filtered = users.filter((user) => user.role === role);
+      setFilterRole(role);
+      setFilteredUsers(filtered);
+    }
+  };
+
+  // Function to handle opening the confirmation dialog
+  const handleOpenDialog = (userId) => {
+    setUserIdToDelete(userId);
+    setOpenDialog(true);
+  };
+
+  // Function to handle closing the confirmation dialog
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setUserIdToDelete(null);
+  };
+
+  // Function to handle deleting the user after confirmation
+  const handleDeleteConfirmed = async () => {
+    try {
+      await axiosClient.delete(`/users/${userIdToDelete}`);
+      // After successful deletion, you may want to update the user list displayed on the frontend
+      // You can fetch the updated user list from the backend again or update the state if you're already keeping track of the user list in state
+      handleCloseDialog(); // Close the confirmation dialog after successful deletion
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      // Handle error, e.g., display an error message to the user
+    }
+  };
+
+  const deleteUser = (userId) => {
+    handleOpenDialog(userId); // Trigger confirmation dialog before deleting the user
+  };
+
   return (
     <PageComponent
       title="User List"
@@ -74,7 +135,40 @@ export default function UserList() {
         )}
         {!loading && !error && (
           <>
-            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "8px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginBottom: "8px",
+              }}
+            >
+              {/* Button for filtering by student */}
+              <IconButton
+                color={filterRole === "2" ? "primary" : "default"}
+                onClick={() => handleRoleFilter("2")}
+                aria-label="filter-student"
+                style={{
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  marginRight: "8px",
+                }}
+              >
+                <Person2Icon />
+              </IconButton>
+              {/* Button for filtering by driver */}
+              <IconButton
+                color={filterRole === "3" ? "primary" : "default"}
+                onClick={() => handleRoleFilter("3")}
+                aria-label="filter-driver"
+                style={{
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  marginRight: "8px",
+                }}
+              >
+                <FlightClassIcon />
+              </IconButton>
+              {/* Search bar */}
               <UserSearch onSearch={handleSearch} />
             </div>
             {filteredUsers.length === 0 ? (
@@ -89,7 +183,6 @@ export default function UserList() {
                           fontWeight: "bold",
                           color: "darkblue",
                           fontFamily: "monospace",
-                          textAlign: "center", // Center align
                         }}
                       >
                         Name
@@ -99,7 +192,6 @@ export default function UserList() {
                           fontWeight: "bold",
                           color: "darkblue",
                           fontFamily: "monospace",
-                          textAlign: "center", // Center align
                         }}
                       >
                         Email
@@ -109,7 +201,6 @@ export default function UserList() {
                           fontWeight: "bold",
                           color: "darkblue",
                           fontFamily: "monospace",
-                          textAlign: "center", // Center align
                         }}
                       >
                         Role
@@ -119,7 +210,6 @@ export default function UserList() {
                           fontWeight: "bold",
                           color: "darkblue",
                           fontFamily: "monospace",
-                          textAlign: "center", // Center align
                         }}
                       >
                         Actions
@@ -159,7 +249,11 @@ export default function UserList() {
                           <IconButton color="primary" aria-label="edit">
                             <EditNoteIcon />
                           </IconButton>
-                          <IconButton color="secondary" aria-label="delete">
+                          <IconButton
+                            color="secondary"
+                            aria-label="delete"
+                            onClick={() => deleteUser(user.id)}
+                          >
                             <PersonRemoveIcon />
                           </IconButton>
                         </TableCell>
@@ -171,6 +265,32 @@ export default function UserList() {
             )}
           </>
         )}
+        {/* Confirmation dialog */}
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Delete User"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this user?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <TButton onClick={handleCloseDialog} color="blue">
+              Cancel
+            </TButton>
+            <TButton
+              onClick={handleDeleteConfirmed}
+              color="red"
+              autoFocus
+            >
+              Delete
+            </TButton>
+          </DialogActions>
+        </Dialog>
       </div>
     </PageComponent>
   );

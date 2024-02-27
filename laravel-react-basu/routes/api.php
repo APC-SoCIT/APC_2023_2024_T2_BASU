@@ -30,6 +30,9 @@ Route::get('/accounts', [AuthController::class, 'getAccounts']);
 Route::delete('/accounts/{id}', [AuthController::class, 'deleteAccount']);
 Route::put('/accounts/{id}', [AuthController::class, 'updateAccount']);
 Route::get('/users', [AuthController::class, 'getUser']);
+Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
+
+
 
 //Protected Routes
 Route::middleware('auth:sanctum')->group(function () {

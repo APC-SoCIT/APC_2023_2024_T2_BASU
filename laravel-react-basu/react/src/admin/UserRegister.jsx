@@ -7,7 +7,7 @@ import {
 import PageComponent from "../components/PageComponent.jsx";
 import TButton from "../components/core/TButton.jsx";
 
-export default function AccountRegister() {
+export default function UserRegister() {
   const { currentUser, setCurrentUser, setUserToken } = useStateContext();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

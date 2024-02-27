@@ -29,6 +29,9 @@ export default function TButton({
         break;
       case "red":
         classes = [...classes, "text-red-500", "focus:border-red-500"];
+        break;
+      case "blue":
+        classes = [...classes, "text-blue-500", "focus:border-blue-500"];
     }
   } else {
     classes = [...classes, "text-white", "focus:ring-2", "focus:ring-offset-2"];
@@ -58,6 +61,13 @@ export default function TButton({
           "focus:ring-emerald-400",
         ];
         break;
+        case "blue":
+          classes = [
+            ...classes,
+            "bg-blue-500",
+            "hover:bg-blue-600",
+            "focus:ring-blue-400",
+          ];
     }
   }
 
