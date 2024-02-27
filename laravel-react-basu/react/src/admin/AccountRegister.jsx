@@ -65,7 +65,7 @@ export default function AccountRegister() {
   return (
     <PageComponent
       buttons={
-        <TButton color="indigo" to="/account">
+        <TButton color="indigo" to="/users">
           <ChevronDoubleLeftIcon className="h-6 w-6 mr-2" />
           Back to Account List
         </TButton>

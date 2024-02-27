@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Public Routes
 Route::post('/reservations', [ReservationController::class, 'store']);
 Route::get('/location', 'LocationController@getLocation');
 
@@ -28,8 +29,9 @@ Route::post('/login', [AuthController::class,'login']);
 Route::get('/accounts', [AuthController::class, 'getAccounts']);
 Route::delete('/accounts/{id}', [AuthController::class, 'deleteAccount']);
 Route::put('/accounts/{id}', [AuthController::class, 'updateAccount']);
+Route::get('/users', [AuthController::class, 'getUser']);
 
-
+//Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);

@@ -23,7 +23,7 @@ const navigation = [
   { name: "Inquire Reservation", to: "/reservation", icon: BookmarkSquareIcon },
   { name: "Start Service", to: "/locationtrack", icon: MapPinIcon },
   { name: "Shuttle Tracker", to: "/locationtrack", icon: MapPinIcon },
-  { name: "Accounts", to: "/account", icon: UserCircleIcon },
+  { name: "Accounts", to: "/users", icon: UserCircleIcon },
 ];
 
 function classNames(...classes) {

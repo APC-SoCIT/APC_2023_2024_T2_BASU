@@ -31,6 +31,22 @@ axiosClient.interceptors.response.use(
   }
 );
 
+// Function to get users
+export const getUsers = async () => {
+  try {
+    const response = await axiosClient.get("/users");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+
+
+
 // Function to update user's location
 export const updateLocation = async (latitude, longitude) => {
   try {

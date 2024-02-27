@@ -17,6 +17,7 @@ import { useStateContext } from "./contexts/ContextProvider";
 import Admin from "./views/Admin";
 import ReservationForm from "./views/ReservationForm";
 import LandingPage from "./views/LandingPage";
+import UserList from "./admin/UserList";
 
 
 
@@ -79,10 +80,6 @@ const router = createBrowserRouter([
         element: <LocationTrack /> ,
       },
       {
-        path: "/account/register",
-        element: <AccountRegister />,
-      },
-      {
         path: "/account/role",
         element: <Role />,
       },
@@ -105,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "/account/register",
         element:  <AccountRegister />,
+      },
+      {
+        path: "/users",
+        element:  <UserList />,
       },
     ],
   },

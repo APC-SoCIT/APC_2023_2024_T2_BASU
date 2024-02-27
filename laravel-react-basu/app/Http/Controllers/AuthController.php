@@ -74,6 +74,20 @@ class AuthController extends Controller
         return $request->user();
     }
 
+    public function getUser()
+    {
+        try {
+            // Fetch all users from the User model
+            $users = User::all();
+
+            // Return JSON response with all user details
+            return response()->json($users);
+        } catch (\Exception $e) {
+            // Handle exceptions (e.g., database error) and return error response
+            return response()->json(['error' => 'Failed to fetch users'], 500);
+        }
+    }
+
     // Registration process for entities other than User
     public function register(RegistrationRequest $request)
     {
