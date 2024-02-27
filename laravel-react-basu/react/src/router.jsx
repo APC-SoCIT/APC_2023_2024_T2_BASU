@@ -16,6 +16,7 @@ import PageNotFound from "./views/PageNotFound";
 import { useStateContext } from "./contexts/ContextProvider";
 import Admin from "./views/Admin";
 import ReservationForm from "./views/ReservationForm";
+import LandingPage from "./views/LandingPage";
 
 
 
@@ -63,11 +64,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element:  <Navigate to="/"/>,
+        element:  <Dashboard />,
       },
       {
         path: "/",
-        element: <Dashboard />,
+        element: <LandingPage />,
       },
       {
         path: "/admin",

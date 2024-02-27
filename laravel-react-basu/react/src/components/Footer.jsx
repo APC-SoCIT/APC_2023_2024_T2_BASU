@@ -50,14 +50,14 @@ const Footer = () => {
           {/* Contact Information */}
           <p className="text-gray-400">
             <br />
-            Asia Pacific College<br />
+           Asia Pacifc College<br />
           </p>
         </div>
       </div>
 
       {/* Bottom Section */}
       <div className="border-t border-gray-700 mt-8 pt-4 text-center text-sm">
-        &copy; 2024 Company Name. All rights reserved.
+        &copy; MNTSDEV | MYSADD | MCSPROJ
       </div>
     </footer>
   );

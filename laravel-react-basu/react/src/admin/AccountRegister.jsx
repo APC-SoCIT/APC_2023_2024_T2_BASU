@@ -3,10 +3,13 @@ import axiosClient from "../axios.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 import {
   AcademicCapIcon,
+  ChevronDoubleLeftIcon,
+  QuestionMarkCircleIcon,
   UserCircleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import PageComponent from "../components/PageComponent.jsx";
+import TButton from "../components/core/TButton.jsx";
 
 export default function AccountRegister() {
   const { currentUser, setCurrentUser, setUserToken } = useStateContext();
@@ -64,10 +67,23 @@ export default function AccountRegister() {
   };
 
   return (
-    <PageComponent>
+    <PageComponent
+      buttons={
+        <TButton color="indigo" to="/account">
+          <ChevronDoubleLeftIcon className="h-6 w-6 mr-2" />
+          Back to Account List
+        </TButton>
+      }
+    >
       <div className="sm:mx-auto sm:w-full ">
-        <h2 className=" mt-2 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900 font-mono">
-          Register a User Account
+        <h2 className="mt-2 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900 font-mono">
+          Register{" "}
+          <span className={`text-${role === "1" ? "red" : role === "2" ? "blue" : "green"}-500`}>
+            {role === "1" && "Admin"}
+            {role === "2" && "Student"}
+            {role === "3" && "Driver"}
+          </span>{" "}
+          Account
         </h2>
         {error.__html && (
           <div
@@ -141,41 +157,45 @@ export default function AccountRegister() {
                 {role === "2" && (
                   <p className="text-sm text-gray-600">
                     Registered students functions are:
-                    <p>
+                    <span className="block">
                       <b> ∘ Live Location</b> tracking of In-Service Shuttle.
-                    </p>
-                    <p>
+                    </span>
+                    <span className="block">
                       <b> ∘ Submit Reservation Form</b> for Shuttle Reservation.
-                    </p>
-                    <p>
+                    </span>
+                    <span className="block">
                       <b> ∘ View Reservation Status</b> for Shuttle Reservation.
-                    </p>
+                    </span>
                   </p>
                 )}
                 {role === "3" && (
                   <p className="text-sm text-gray-600">
                     Registered drivers functions are:
-                    <p>
+                    <span className="block">
                       <b> ∘ Transmit GPS Location</b> for Shuttle Service.
-                    </p>
-                    <p>
+                    </span>
+                    <span className="block">
                       <b> ∘ Track</b> other active Shuttle Service.
-                    </p>
+                    </span>
                   </p>
                 )}
                 {role === "1" && (
                   <p className="text-sm text-gray-600">
-                  Registered admins functions are:
-                  <p>
-                    <b> ∘ Create Accounts</b> for all users.
+                    Registered admins functions are:
+                    <span className="block">
+                      <b> ∘ Create Accounts</b> for all users.
+                    </span>
+                    <span className="block">
+                      <b> ∘ Live Location</b> tracking of In-Service Shuttle.
+                    </span>
+                    <span className="block">
+                      <b> ∘ Manage Reservation Inquiry</b> using the digitized
+                      System.
+                    </span>
+                    <span className="block">
+                      <b> ∘ Manage the System</b>.
+                    </span>
                   </p>
-                  <p>
-                    <b> ∘ Live Location</b> tracking of In-Service Shuttle.
-                  </p>
-                  <p>
-                    <b> ∘ Manage Reservation Inquiry</b> using the digitized System.
-                  </p>
-                </p>
                 )}
               </div>
             </div>

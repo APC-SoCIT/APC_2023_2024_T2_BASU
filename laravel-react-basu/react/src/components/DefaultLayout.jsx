@@ -5,6 +5,7 @@ import {
   Bars3Icon,
   BookmarkSquareIcon,
   ChartBarSquareIcon,
+  HomeIcon,
   MapPinIcon,
   UserCircleIcon,
   UserIcon,
@@ -16,8 +17,11 @@ import axiosClient from "../axios";
 import Footer from "./Footer";
 
 const navigation = [
-  { name: "Dashboard", to: "/", icon: ChartBarSquareIcon },
+  { name: "Home", to: "/", icon: HomeIcon },
+  { name: "Dashboard", to: "/dashboard", icon: ChartBarSquareIcon },
   { name: "Reservation", to: "/reservation", icon: BookmarkSquareIcon },
+  { name: "Inquire Reservation", to: "/reservation", icon: BookmarkSquareIcon },
+  { name: "Start Service", to: "/locationtrack", icon: MapPinIcon },
   { name: "Shuttle Tracker", to: "/locationtrack", icon: MapPinIcon },
   { name: "Accounts", to: "/account", icon: UserCircleIcon },
 ];
@@ -83,6 +87,9 @@ export default function DefaultLayout() {
                         src="/images/basu-icon-transparent.png"
                         alt="BASU Icon"
                       />
+                    </div>
+                    <div className="font-sans font-semibold text-white">
+                      BASU ➲
                     </div>
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:block">
