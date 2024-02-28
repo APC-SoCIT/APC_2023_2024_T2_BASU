@@ -14,9 +14,10 @@ import UserRegister from "./admin/UserRegister";
 import StartService from "./driver/StartService";
 import InquireReservation from "./student/InquireReservation";
 import Dashboard from "./admin/Dashboard";
-import Admin from "./admin/Admin";
 import Reservation from "./admin/Reservation";
 import StudentReservation from "./student/StudentReservation";
+import ShuttleForm from "./admin/ShuttleForm";
+import ShuttleStorage from "./admin/ShuttleStorage";
 
 {
   /*ROUTE GUARDS*/
@@ -75,10 +76,6 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "/admin",
-        element: <Admin />,
-      },
-      {
         path: "/reservation",
         element: (
           <AdminRouteGuard>
@@ -111,6 +108,22 @@ const router = createBrowserRouter([
         element: (
           <AdminRouteGuard>
             <UserList />
+          </AdminRouteGuard>
+        ),
+      },
+      {
+        path: "/shuttle/form",
+        element: (
+          <AdminRouteGuard>
+            <ShuttleForm />
+          </AdminRouteGuard>
+        ),
+      },
+      {
+        path: "/shuttle/storage",
+        element: (
+          <AdminRouteGuard>
+            <ShuttleStorage />
           </AdminRouteGuard>
         ),
       },

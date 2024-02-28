@@ -11,13 +11,13 @@ export default function TButton({
   children,
 }) {
   let classes = [
-    "flex",
+    "inline-flex",
     "items-center",
-    "whitespace-nowrap",
     "text-sm",
-    "border",
-    "border-2",
-    "border-transparent",
+    `border-${color}-500`, // Set border color based on the color prop
+    "rounded-md", // Apply rounded corners
+    "px-2", // Apply horizontal padding
+    "py-1", // Apply vertical padding
   ];
 
   if (link) {
@@ -61,13 +61,13 @@ export default function TButton({
           "focus:ring-emerald-400",
         ];
         break;
-        case "blue":
-          classes = [
-            ...classes,
-            "bg-blue-500",
-            "hover:bg-blue-600",
-            "focus:ring-blue-400",
-          ];
+      case "blue":
+        classes = [
+          ...classes,
+          "bg-blue-500",
+          "hover:bg-blue-600",
+          "focus:ring-blue-400",
+        ];
     }
   }
 
@@ -79,7 +79,6 @@ export default function TButton({
       "items-center",
       "justify-center",
       "rounded-full",
-      "text-sm",
     ];
   } else {
     classes = [...classes, "p-0", "py-2", "px-4", "rounded-md"];
@@ -98,7 +97,9 @@ export default function TButton({
         </Link>
       )}
       {!to && !href && (
-        <button onClick={onClick} className={classes.join(" ")}>{children}</button>
+        <button onClick={onClick} className={classes.join(" ")}>
+          {children}
+        </button>
       )}
     </>
   );
