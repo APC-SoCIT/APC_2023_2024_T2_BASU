@@ -60,15 +60,14 @@ export const getLocation = async () => {
   }
 };
 
-
-// // Function to update an account
-// export const updateAccount = async (id, updatedAccount) => {
-//   try {
-//     const response = await axiosClient.put(`/accounts/${id}`, updatedAccount);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
+// Function to post shuttle form
+export const postShuttleForm = async (formData) => {
+  try {
+    const response = await axiosClient.post("/shuttle/form", formData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
 export default axiosClient;
