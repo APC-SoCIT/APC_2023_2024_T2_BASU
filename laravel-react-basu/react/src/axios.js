@@ -70,4 +70,26 @@ export const postShuttleForm = async (formData) => {
   }
 };
 
+// Function to get shuttle form
+export const getShuttleForm = async () => {
+  try {
+    const response = await axiosClient.get("/shuttle/storage");
+    return response.data;
+  } catch (error) {
+    throw error.response.data; // Throw meaningful error message
+  }
+};
+
+
+
+// Function to delete shuttle form
+export const deleteShuttleForm = async (shuttleId) => {
+  try {
+    const response = await axiosClient.delete(`/shuttle/storage/${shuttleId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export default axiosClient;

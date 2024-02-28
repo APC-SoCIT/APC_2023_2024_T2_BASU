@@ -30,7 +30,11 @@ Route::post('/login', [AuthController::class,'login']);
 Route::get('/users', [AuthController::class, 'getUser']);
 Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
 
-Route::post('/shuttle/form', [ShuttleFormController::class,'store']);
+//Routes for Shuttle Storage
+Route::post('/shuttle/form', [ShuttleFormController::class,'post']);
+Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
+Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
+
 
 //Protected Routes
 Route::middleware('auth:sanctum')->group(function () {

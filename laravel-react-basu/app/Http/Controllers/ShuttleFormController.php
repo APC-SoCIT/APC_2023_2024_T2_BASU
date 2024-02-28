@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ShuttleForm;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ShuttleFormController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -35,7 +36,7 @@ class ShuttleFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function post(Request $request)
     {
         $validatedData = $request->validate([
             'shuttle_name' => 'required',
@@ -54,4 +55,32 @@ class ShuttleFormController extends Controller
     }
 
     // Other methods like show, edit, update, destroy can also be added based on your requirements
+
+    /**
+     * Retrieve all shuttle forms.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function get(Request $request)
+    {
+        $shuttleForms = ShuttleForm::all();
+        return response()->json(['success' => true, 'data' => $shuttleForms], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function delete($id)
+    {
+        try {
+            $shuttleForm = ShuttleForm::findOrFail($id);
+            $shuttleForm->delete();
+            return response()->json(['success' => true, 'message' => 'Shuttle form deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to delete shuttle form.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

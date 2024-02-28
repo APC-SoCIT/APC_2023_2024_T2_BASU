@@ -14,31 +14,74 @@ export default function ShuttleForm() {
     passenger_capacity: "",
     working_condition: "",
   });
+  const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [receiptContent, setReceiptContent] = useState("");
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Make a POST request to your backend API using postShuttleForm
-      const response = await postShuttleForm(formData);
-      console.log("Form submitted successfully:", response);
-      // Clear form fields after successful submission
-      setFormData({
-        shuttle_name: "",
-        shuttle_plate_number: "",
-        shuttle_color: "",
-        shuttle_landmark: "",
-        passenger_capacity: "",
-        working_condition: "",
-      });
+      // Update state to show modal
+      setShowModal(true);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      handleError(error);
     }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      // Call the function to post shuttle form data
+      const response = await postShuttleForm(formData);
+
+      // Generate receipt content
+      const receipt = `Shuttle Name: ${formData.shuttle_name}\nPlate Number: ${formData.shuttle_plate_number}\nColor: ${formData.shuttle_color}\nLandmark: ${formData.shuttle_landmark}\nPassenger Capacity: ${formData.passenger_capacity}\nWorking Condition: ${formData.working_condition}`;
+
+      // Update state to set receipt content
+      setReceiptContent(receipt);
+      clearFormData();
+      closeModal();
+      window.location.reload();
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleError = (error) => {
+    console.error("Error submitting form:", error);
+    if (error.response) {
+      console.error("Error status:", error.response.status);
+      console.error("Error data:", error.response.data);
+      setError(error.response.data.message);
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+      setError("No response received");
+    } else {
+      console.error("Error:", error.message);
+      setError(error.message);
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const clearFormData = () => {
+    setFormData({
+      shuttle_name: "",
+      shuttle_plate_number: "",
+      shuttle_color: "",
+      shuttle_landmark: "",
+      passenger_capacity: "",
+      working_condition: "",
+    });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -50,6 +93,12 @@ export default function ShuttleForm() {
         </TButton>
       }
     >
+      {/* Display error message */}
+      {error && (
+        <div className="border bg-white border-red-600 rounded-md p-4 mb-6">
+          <div className="text-red-600 font-bold text-center">{error}</div>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
@@ -276,19 +325,76 @@ export default function ShuttleForm() {
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
-            type="button"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
+            type="button" // Change type to button
+            onClick={handleSubmit} // Call handleSubmit when button is clicked
             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Save
           </button>
         </div>
       </form>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 max-w-screen-lg w-screen rounded-lg">
+            <h2 className="text-xl font-semibold mb-4 underline text-blue-500">
+              Confirmation Receipt
+            </h2>
+            {/* Receipt content */}
+            <div className="mb-4 flex justify-between">
+              <div className="w-1/2 font-mono">
+                {/* Adjust the width as needed */}
+                <p>
+                  <b>Shuttle Name:</b>
+                </p>
+                <p>
+                  <b>Plate Number:</b>
+                </p>
+                <p>
+                  <b>Shuttle Color:</b>
+                </p>
+                <p>
+                  <b>Landmark Design:</b>
+                </p>
+                <p>
+                  <b>Passenger Capacity:</b>
+                </p>
+                <p>
+                  <b>Working Condition:</b>
+                </p>
+              </div>
+              <div className="w-1/2">
+                {/* Adjust the width as needed */}
+                <p>{formData.shuttle_name}</p>
+                <p>{formData.shuttle_plate_number}</p>
+                <p>{formData.shuttle_color}</p>
+                <p>{formData.shuttle_landmark}</p>
+                <p>{formData.passenger_capacity}</p>
+                <p>{formData.working_condition}</p>
+              </div>
+            </div>
+            <p className="mb-4 pt-5 font-mono text-indigo-700 underline">
+              Please review the information above before proceeding.
+            </p>
+            {/* Confirmation buttons */}
+            <div className="flex justify-end">
+              <button
+                onClick={closeModal}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-4 hover:bg-gray-400"
+              >
+                Back
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PageComponent>
   );
 }
