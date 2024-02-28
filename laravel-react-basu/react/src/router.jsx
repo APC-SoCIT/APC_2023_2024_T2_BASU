@@ -16,6 +16,7 @@ import InquireReservation from "./student/InquireReservation";
 import Dashboard from "./admin/Dashboard";
 import Admin from "./admin/Admin";
 import Reservation from "./admin/Reservation";
+import StudentReservation from "./student/StudentReservation";
 
 {
   /*ROUTE GUARDS*/
@@ -122,6 +123,14 @@ const router = createBrowserRouter([
         element: (
           <StudentRouteGuard>
             <InquireReservation />
+          </StudentRouteGuard>
+        ),
+      },
+      {
+        path: "/student/reservation/list",
+        element: (
+          <StudentRouteGuard>
+            <StudentReservation />
           </StudentRouteGuard>
         ),
       },

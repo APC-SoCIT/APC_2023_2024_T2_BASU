@@ -22,11 +22,11 @@ const navigation = [
   { name: "Reservation", to: "/reservation", icon: BookmarkSquareIcon },
   {
     name: "Inquire Reservation",
-    to: "/inquire/reservation",
+    to: "/student/reservation/list",
     icon: BookmarkSquareIcon,
   },
   { name: "Start Service", to: "/startservice", icon: MapPinIcon },
-  { name: "Shuttle Tracker", to: "/locationtrack", icon: MapPinIcon },
+  { name: "Tracker", to: "/locationtrack", icon: MapPinIcon },
   { name: "Accounts", to: "/users", icon: UserCircleIcon },
 ];
 
@@ -71,7 +71,7 @@ export default function DefaultLayout() {
         "Home",
         "Dashboard",
         "Reservation",
-        "Shuttle Tracker",
+        "Tracker",
         "Accounts",
       ].includes(item.name);
     } else if (currentUser.role === "2") {
