@@ -35,7 +35,7 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
-  const { currentUser, userToken, setCurrentUser, setUserToken } =
+  const { currentUser, userToken, setCurrentUser, setUserToken, setRole  } =
     useStateContext();
 
   if (!userToken) {
@@ -47,6 +47,7 @@ export default function DefaultLayout() {
     axiosClient.post("/logout").then((res) => {
       setCurrentUser({});
       setUserToken(null);
+      setRole(null);
     });
   };
 

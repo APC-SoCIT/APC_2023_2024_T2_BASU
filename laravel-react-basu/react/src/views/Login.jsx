@@ -4,7 +4,7 @@ import axiosClient from "../axios";
 import { useStateContext } from "../contexts/ContextProvider";
 
 export default function Login() {
-  const { setCurrentUser, setUserToken } = useStateContext();
+  const { setCurrentUser, setUserToken, setRole } = useStateContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ __html: "" });
@@ -23,8 +23,10 @@ export default function Login() {
         password,
       })
       .then(({ data }) => {
+        console.log(data); // Log the data object to inspect its structure
         setCurrentUser(data.user);
         setUserToken(data.token);
+        setRole(data.role);
         setLoginError(""); // Clear login error if login is successful
       })
       .catch((error) => {

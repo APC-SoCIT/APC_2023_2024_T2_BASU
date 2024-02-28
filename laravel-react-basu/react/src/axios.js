@@ -41,12 +41,6 @@ export const getUsers = async () => {
   }
 };
 
-
-
-
-
-
-
 // Function to update user's location
 export const updateLocation = async (latitude, longitude) => {
   try {
@@ -66,38 +60,15 @@ export const getLocation = async () => {
   }
 };
 
-// Function to register a new user
-export const registerUser = async (userData) => {
-  try {
-    const response = await axiosClient.post("/account/register", userData);
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.data) {
-      throw error.response.data; // Throw meaningful error message from server
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later."); // Throw generic error message
-    }
-  }
-};
 
-// Function to get accounts
-export const getAccounts = async () => {
-  try {
-    const response = await axiosClient.get("/accounts");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Function to update an account
-export const updateAccount = async (id, updatedAccount) => {
-  try {
-    const response = await axiosClient.put(`/accounts/${id}`, updatedAccount);
-    return response.data;
-  } catch (error) {
-    throw error.response.data;
-  }
-};
+// // Function to update an account
+// export const updateAccount = async (id, updatedAccount) => {
+//   try {
+//     const response = await axiosClient.put(`/accounts/${id}`, updatedAccount);
+//     return response.data;
+//   } catch (error) {
+//     throw error.response.data;
+//   }
+// };
 
 export default axiosClient;

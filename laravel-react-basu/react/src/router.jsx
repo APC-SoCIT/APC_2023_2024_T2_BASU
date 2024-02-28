@@ -1,25 +1,21 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
-import Dashboard from "./views/Dashboard";
-import Reservation from "./views/Reservation";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
 import GuestLayout from "./components/GuestLayout";
 import DefaultLayout from "./components/DefaultLayout";
 import LocationTrack from "./views/LocationTrack";
-// import ReservationView from "./views/ReservationView";
-import ReservationPublicView from "./views/ReservationPublicView";
-import Role from "./views/Role";
-import AccountList from "./views/AccountList";
 import PageNotFound from "./views/PageNotFound";
 import { useStateContext } from "./contexts/ContextProvider";
-import Admin from "./views/Admin";
 import ReservationForm from "./views/ReservationForm";
 import LandingPage from "./views/LandingPage";
 import UserList from "./admin/UserList";
 import UserRegister from "./admin/UserRegister";
 import StartService from "./driver/StartService";
 import InquireReservation from "./student/InquireReservation";
+import Dashboard from "./admin/Dashboard";
+import Admin from "./admin/Admin";
+import Reservation from "./admin/Reservation";
 
 {
   /*ROUTE GUARDS*/
@@ -80,22 +76,6 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: <Admin />,
-      },
-      {
-        path: "/account/role",
-        element: (
-          <AdminRouteGuard>
-            <Role />
-          </AdminRouteGuard>
-        ),
-      },
-      {
-        path: "/account",
-        element: (
-          <AdminRouteGuard>
-            <AccountList />
-          </AdminRouteGuard>
-        ),
       },
       {
         path: "/reservation",
@@ -161,10 +141,6 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
     ],
-  },
-  {
-    path: "/reservation/public/:slug",
-    element: <ReservationPublicView />,
   },
   {
     path: "/*",

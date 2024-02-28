@@ -1,75 +1,71 @@
-import { useContext } from "react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
+import axiosClient from "../axios";
+import LoadingModal from "../styling/LoadingModal";
 
 const StateContext = createContext({
   currentUser: {},
   userToken: null,
   role: null,
-  reservations: [],
-  questionTypes: [],
-  toast: {
-    message: null,
-    show: false,
-  },
-  setCurrentUser: () => {},
-  setUserToken: () => {},
+  currentLocation: null,
+  updateLocation: () => {},
   getLocation: () => {},
   setRole: () => {},
 });
 
-
 export const ContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
-  const [userToken, _setUserToken] = useState(localStorage.getItem('TOKEN') || '');
-  const [role, _setRole] = useState(localStorage.getItem('ROLE') || '');
-  const [reservations, setReservations] = useState()
-  const [questionTypes] = useState(['text', "select", "radio", "checkbox", "textarea"])
-  const [toast, setToast] = useState({message: '', show: false})
+  const [userToken, setUserToken] = useState(localStorage.getItem("TOKEN") || "");
+  const [role, setRole] = useState(localStorage.getItem("ROLE") || "");
   const [currentLocation, setCurrentLocation] = useState(null);
-
-  const setUserToken = (token) => {
-    if (token) {
-      localStorage.setItem('TOKEN', token)
-    } else {
-      localStorage.removeItem('TOKEN')
-    }
-    _setUserToken(token);
-  }
-
-  const setRole = (role) => {
-    if (role) {
-      localStorage.setItem('ROLE', role);
-    } else {
-      localStorage.removeItem('ROLE');
-    }
-    _setRole(role);
-  };
-
-  const showToast = (message) => {
-    setToast({ message, show: true })
-    setTimeout(() => {
-      setToast({message: '', show: false})
-    }, 5000)
-  }
+  const [loading, setLoading] = useState(true);
 
   const updateLocation = async (latitude, longitude) => {
     try {
-      await axios.post('/location', { latitude, longitude });
+      await axios.post("/location", { latitude, longitude });
       setCurrentLocation({ latitude, longitude });
     } catch (error) {
-      console.error('Failed to update location:', error);
+      console.error("Failed to update location:", error);
     }
   };
 
   const getLocation = async () => {
     try {
-      const response = await axios.get('/location');
+      const response = await axios.get("/location");
       setCurrentLocation(response.data);
     } catch (error) {
-      console.error('Failed to get location:', error);
+      console.error("Failed to get location:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedToken = localStorage.getItem("TOKEN");
+        if (storedToken) {
+          const response = await axiosClient.get("/me");
+          setCurrentUser(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("TOKEN");
+    const storedRole = localStorage.getItem("ROLE");
+    if (storedToken) setUserToken(storedToken);
+    if (storedRole) setRole(storedRole);
+  }, []);
+
+  if (loading) {
+    // Render the LoadingModal component while loading
+    return <LoadingModal />;
+  }
 
   return (
     <StateContext.Provider
@@ -78,11 +74,6 @@ export const ContextProvider = ({ children }) => {
         setCurrentUser,
         userToken,
         setUserToken,
-        reservations,
-        setReservations,
-        questionTypes,
-        toast,
-        showToast,
         currentLocation,
         updateLocation,
         getLocation,

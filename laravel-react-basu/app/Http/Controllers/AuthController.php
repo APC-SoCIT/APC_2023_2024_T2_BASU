@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
-use App\Models\Registration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegistrationRequest;
-use Illuminate\Support\Facades\Validator;
 
+// use Illuminate\Support\Facades\Hash;
+// use App\Http\Requests\RegistrationRequest;
+// use Illuminate\Support\Facades\Validator;
+// use App\Models\Registration;
 
 class AuthController extends Controller
 {
@@ -31,7 +31,8 @@ class AuthController extends Controller
 
         return response([
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'role' => $user
         ]);
     }
 
@@ -53,7 +54,8 @@ class AuthController extends Controller
 
         return response([
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'role' => $user
         ]);
     }
 
@@ -100,88 +102,88 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    // Registration process for entities other than User
-    public function register(RegistrationRequest $request)
-    {
-        $validated = $request->validated();
-
-        $registration = Registration::create([
-            'first_name' => $validated['firstName'],
-            'last_name' => $validated['lastName'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role']
-        ]);
-
-        return response()->json(['message' => 'Registration successful'], 201);
-    }
-
-    // Get list of accounts (Users)
-    public function getAccounts(Request $request)
-    {
-        try {
-            // Fetch accounts from the registration table
-            $accounts = Registration::all();
-
-            // Return JSON response with accounts
-            return response()->json($accounts);
-        } catch (\Exception $e) {
-            // Handle exceptions and return error response
-            return response()->json(['error' => 'Failed to fetch accounts'], 500);
-        }
-    }
-
-    public function deleteAccount($id)
-    {
-        $account = Registration::find($id);
-
-        if (!$account) {
-            return response()->json(['message' => 'Account not found'], 404);
-        }
-
-        $account->delete();
-
-        return response()->json(['message' => 'Account deleted successfully'], 200);
-    }
-
-    public function updateAccount(Request $request, $id)
-    {
-        $account = Registration::find($id);
-
-        if (!$account) {
-            return response()->json(['error' => 'Account not found for ID ' . $id], 404);
-        }
-
-        // Validate input data
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:registration,email,' . $id,
-            'role' => 'required|string|in:student,driver',
-            'phone_number' => $request->input('role') == 'driver' ? 'required|string|max:20' : '',
-            'password' => 'sometimes|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        // Update account details
-        $account->fill($request->all()); // Fill the model with request data
-        $account->save();
-
-        return response()->json(['message' => 'Account details updated successfully', 'account' => $account]);
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+    // // Registration process for entities other than User
+    // public function register(RegistrationRequest $request)
+    // {
+    //     $validated = $request->validated();
+
+    //     $registration = Registration::create([
+    //         'first_name' => $validated['firstName'],
+    //         'last_name' => $validated['lastName'],
+    //         'email' => $validated['email'],
+    //         'password' => Hash::make($validated['password']),
+    //         'role' => $validated['role']
+    //     ]);
+
+    //     return response()->json(['message' => 'Registration successful'], 201);
+    // }
+
+    // // Get list of accounts (Users)
+    // public function getAccounts(Request $request)
+    // {
+    //     try {
+    //         // Fetch accounts from the registration table
+    //         $accounts = Registration::all();
+
+    //         // Return JSON response with accounts
+    //         return response()->json($accounts);
+    //     } catch (\Exception $e) {
+    //         // Handle exceptions and return error response
+    //         return response()->json(['error' => 'Failed to fetch accounts'], 500);
+    //     }
+    // }
+
+    // public function deleteAccount($id)
+    // {
+    //     $account = Registration::find($id);
+
+    //     if (!$account) {
+    //         return response()->json(['message' => 'Account not found'], 404);
+    //     }
+
+    //     $account->delete();
+
+    //     return response()->json(['message' => 'Account deleted successfully'], 200);
+    // }
+
+//     public function updateAccount(Request $request, $id)
+//     {
+//         $account = Registration::find($id);
+
+//         if (!$account) {
+//             return response()->json(['error' => 'Account not found for ID ' . $id], 404);
+//         }
+
+//         // Validate input data
+//         $validator = Validator::make($request->all(), [
+//             'first_name' => 'required|string|max:255',
+//             'last_name' => 'required|string|max:255',
+//             'email' => 'required|string|email|max:255|unique:registration,email,' . $id,
+//             'role' => 'required|string|in:student,driver',
+//             'phone_number' => $request->input('role') == 'driver' ? 'required|string|max:20' : '',
+//             'password' => 'sometimes|string|min:8',
+//         ]);
+
+//         if ($validator->fails()) {
+//             return response()->json(['error' => $validator->errors()->first()], 422);
+//         }
+
+//         // Update account details
+//         $account->fill($request->all()); // Fill the model with request data
+//         $account->save();
+
+//         return response()->json(['message' => 'Account details updated successfully', 'account' => $account]);
+//     }
+// }
