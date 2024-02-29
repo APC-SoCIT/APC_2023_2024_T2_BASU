@@ -74,7 +74,7 @@ export default function UserRegister() {
       <div className="sm:mx-auto sm:w-full ">
         <h2 className="mt-2 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900 font-mono">
           Register{" "}
-          <span className={`text-${role === "1" ? "red" : role === "2" ? "blue" : "green"}-500`}>
+          <span className={`text-${role === "1" ? "red" : role === "2" ? "blue" : "yellow"}-500`}>
             {role === "1" && "Admin"}
             {role === "2" && "Student"}
             {role === "3" && "Driver"}

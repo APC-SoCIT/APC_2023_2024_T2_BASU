@@ -19,16 +19,16 @@ export default function Reservation() {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Product name
+                Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Color
+                Status
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
+                Date Submitted
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                Date Returned
               </th>
               <th scope="col" className="px-6 py-3">
                 <span className="sr-only">Actions</span>
@@ -38,20 +38,20 @@ export default function Reservation() {
           <tbody>
             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                Apple MacBook Pro 17"
+                Hanzel Bernante
               </td>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
+              <td className="px-6 py-4">reviewing</td>
+              <td className="px-6 py-4">02/08/2024</td>
+              <td className="px-6 py-4">~</td>
               <td className="px-6 py-4 flex justify-end space-x-4">
                 <a
                   href="#"
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
-                  Edit
+                  Show
                 </a>
                 <button className="text-red-600 dark:text-red-500 hover:underline">
-                  Delete
+                  Hide
                 </button>
               </td>
             </tr>

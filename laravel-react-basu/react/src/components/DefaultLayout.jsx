@@ -76,12 +76,12 @@ export default function DefaultLayout() {
       ].includes(item.name);
     } else if (currentUser.role === "2") {
       // Student
-      return ["Home", "Inquire Reservation", "Shuttle Tracker"].includes(
+      return ["Home", "Inquire Reservation", "Tracker"].includes(
         item.name
       );
     } else if (currentUser.role === "3") {
       // Driver
-      return ["Home", "Start Service", "Shuttle Tracker"].includes(item.name);
+      return ["Home", "Start Service", "Tracker"].includes(item.name);
     }
     return false; // Other roles won't see any navigation items
   });
