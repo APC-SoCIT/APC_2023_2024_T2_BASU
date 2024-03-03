@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       {
         path: "/reservation",
         element: (
-          <RoleRouteGuard allowedRoles={[2]}>
+          <RoleRouteGuard allowedRoles={[1]}>
             <Reservation />
           </RoleRouteGuard>
         ),
