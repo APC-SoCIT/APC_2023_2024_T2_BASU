@@ -19,39 +19,12 @@ import StudentReservation from "./student/StudentReservation";
 import ShuttleForm from "./admin/ShuttleForm";
 import ShuttleStorage from "./admin/ShuttleStorage";
 
-{
-  /*ROUTE GUARDS*/
-}
-// Route guard for admin-only routes
-export const AdminRouteGuard = ({ children }) => {
+// Define role constants
+const RoleRouteGuard = ({ allowedRoles, children }) => {
   const { currentUser } = useStateContext();
 
-  if (currentUser.role !== "1") {
-    // Redirect to a different route if not admin
-    return <Navigate to="/unauthorized" />;
-  }
-
-  return children;
-};
-
-// Route guard for student-only routes
-export const StudentRouteGuard = ({ children }) => {
-  const { currentUser } = useStateContext();
-
-  if (currentUser.role !== "2") {
-    // Redirect to a different route if not a student
-    return <Navigate to="/unauthorized" />;
-  }
-
-  return children;
-};
-
-// Route guard for driver-only routes
-export const DriverRouteGuard = ({ children }) => {
-  const { currentUser } = useStateContext();
-
-  if (currentUser.role !== "3") {
-    // Redirect to a different route if not a driver
+  if (!allowedRoles.includes(currentUser.role)) {
+    // Redirect to unauthorized route if the user's role is not allowed
     return <Navigate to="/unauthorized" />;
   }
 
@@ -65,11 +38,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: (
-          <AdminRouteGuard>
-            <Dashboard />
-          </AdminRouteGuard>
-        ),
+        element: <Dashboard />,
       },
       {
         path: "/",
@@ -78,18 +47,14 @@ const router = createBrowserRouter([
       {
         path: "/reservation",
         element: (
-          <AdminRouteGuard>
+          <RoleRouteGuard allowedRoles={[2]}>
             <Reservation />
-          </AdminRouteGuard>
+          </RoleRouteGuard>
         ),
       },
       {
         path: "/reservation/create",
-        element: (
-          <AdminRouteGuard>
-            <ReservationForm />
-          </AdminRouteGuard>
-        ),
+        element: <ReservationForm />,
       },
       {
         path: "/locationtrack",
@@ -97,55 +62,38 @@ const router = createBrowserRouter([
       },
       {
         path: "/account/register",
-        element: (
-          <AdminRouteGuard>
-            <UserRegister />
-          </AdminRouteGuard>
-        ),
+        element: <UserRegister />,
       },
       {
         path: "/users",
-        element: (
-          <AdminRouteGuard>
-            <UserList />
-          </AdminRouteGuard>
-        ),
+        element: <UserList />,
       },
       {
         path: "/shuttle/form",
-        element: (
-          <AdminRouteGuard>
-            <ShuttleForm />
-          </AdminRouteGuard>
-        ),
+        element: <ShuttleForm />,
       },
       {
         path: "/shuttle/storage",
-        element: (
-          <AdminRouteGuard>
-            <ShuttleStorage />
-          </AdminRouteGuard>
-        ),
+        element: <ShuttleStorage />,
       },
       {
         path: "/startservice",
-        element: <DriverRouteGuard><StartService /></DriverRouteGuard>,
+        element: <StartService />,
       },
       {
         path: "/inquire/reservation",
         element: (
-          <StudentRouteGuard>
+          <RoleRouteGuard allowedRoles={[2]}>
             <InquireReservation />
-          </StudentRouteGuard>
+          </RoleRouteGuard>
         ),
       },
       {
         path: "/student/reservation/list",
-        element: (
-          <StudentRouteGuard>
-            <StudentReservation />
-          </StudentRouteGuard>
-        ),
+        element:
+        <RoleRouteGuard allowedRoles={[2]}>
+        <StudentReservation />
+      </RoleRouteGuard>
       },
     ],
   },

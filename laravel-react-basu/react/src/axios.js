@@ -44,9 +44,23 @@ export const getUsers = async () => {
 // Function to update user's location
 export const updateLocation = async (latitude, longitude) => {
   try {
-    await axiosClient.post("/location", { latitude, longitude });
+    await axiosClient.post("/startservice", { latitude, longitude });
   } catch (error) {
     throw error.response.data; // Throw meaningful error message
+  }
+};
+
+// Function to post user location details
+export const postUserLocation = async (userId, latitude, longitude) => {
+  try {
+    await axiosClient.post("/startservice", { userId, latitude, longitude });
+  } catch (error) {
+    // Check if error.response is defined before accessing its properties
+    if (error.response) {
+      throw error.response.data; // Throw meaningful error message from server
+    } else {
+      throw new Error("Failed to communicate with the server"); // Throw generic error message for network issues
+    }
   }
 };
 
@@ -79,8 +93,6 @@ export const getShuttleForm = async () => {
     throw error.response.data; // Throw meaningful error message
   }
 };
-
-
 
 // Function to delete shuttle form
 export const deleteShuttleForm = async (shuttleId) => {

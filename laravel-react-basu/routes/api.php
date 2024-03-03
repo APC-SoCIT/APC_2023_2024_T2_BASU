@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ShuttleFormController;
+use App\Http\Controllers\TripController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,17 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-{/*Discontinued Routes */}
-// Route::get('/accounts', [AuthController::class, 'getAccounts']);
-// Route::delete('/accounts/{id}', [AuthController::class, 'deleteAccount']);
-// Route::put('/accounts/{id}', [AuthController::class, 'updateAccount']);
+
 
 //Public Routes
-Route::get('/location', 'LocationController@getLocation');
 Route::post('/account/register', [AuthController::class, 'register']);
 Route::post('/signup', [AuthController::class,'signup']);
 Route::post('/login', [AuthController::class,'login']);
 Route::get('/users', [AuthController::class, 'getUser']);
+
+
 Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
 
 //Routes for Shuttle Storage
@@ -36,12 +35,28 @@ Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
 Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
 
 
+//Live Tracking:
+
+
 //Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-    Route::post('/location', [LocationController::class, 'updateLocation']);
-    Route::get('/location', [LocationController::class, 'getLocation']);
+
+    Route::get('/driver', [DriverController::class, 'show']);
+    Route::post('/driver', [DriverController::class, 'update']);
+
+    Route::post('trip', [TripController::class, 'store']);
+    Route::post('trip/{trip}', [TripController::class, 'show']);
+
+    Route::post('trip/{trip}/accept', [TripController::class, 'accept']);
+    Route::post('trip/{trip}/start', [TripController::class, 'start']);
+    Route::post('trip/{trip}/end', [TripController::class, 'end']);
+    Route::post('trip/{trip}/location', [TripController::class, 'location']);
+
+    Route::get('/user', function(Request $request){
+        return $request->user();
+    });
 });
 
 

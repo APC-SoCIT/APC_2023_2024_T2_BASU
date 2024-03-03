@@ -10,7 +10,6 @@ import "leaflet/dist/leaflet.css";
 import PageComponent from "../components/PageComponent";
 import TButton from "../components/core/TButton";
 import { updateLocation, getLocation } from "../axios"; // Import the updateLocation and getLocation functions
-import { BiLocationPlus } from "react-icons/bi"; // Import BiLocationPlus icon
 
 function LocationMarker({ position, setPosition }) {
   const map = useMapEvents({
@@ -153,7 +152,7 @@ const LocationTrack = () => {
   </div>
   <div className="border border-blue-900 p-4 rounded-md">
     <p className="text-gray-800 font-mono">
-      Anotha Description
+      Another Description
     </p>
   </div>
 </div>

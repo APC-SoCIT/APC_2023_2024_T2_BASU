@@ -35,7 +35,7 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
-  const { currentUser, userToken, setCurrentUser, setUserToken, setRole  } =
+  const { currentUser, userToken, setCurrentUser, setUserToken, setRole } =
     useStateContext();
 
   if (!userToken) {
@@ -63,9 +63,8 @@ export default function DefaultLayout() {
   }, []);
 
   // Define navigation items based on user's role
-  // Define navigation items based on user's role
   const filteredNavigation = navigation.filter((item) => {
-    if (currentUser.role === "1") {
+    if (currentUser.role === 1) {
       // Admin
       return [
         "Home",
@@ -74,12 +73,10 @@ export default function DefaultLayout() {
         "Tracker",
         "Accounts",
       ].includes(item.name);
-    } else if (currentUser.role === "2") {
+    } else if (currentUser.role === 2) {
       // Student
-      return ["Home", "Inquire Reservation", "Tracker"].includes(
-        item.name
-      );
-    } else if (currentUser.role === "3") {
+      return ["Home", "Inquire Reservation", "Tracker"].includes(item.name);
+    } else if (currentUser.role === 3) {
       // Driver
       return ["Home", "Start Service", "Tracker"].includes(item.name);
     }
