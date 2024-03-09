@@ -32,10 +32,8 @@ export default function ShuttleForm() {
     try {
       // Call the function to post shuttle form data
       const response = await postShuttleForm(formData);
-
       // Generate receipt content
       const receipt = `Shuttle Name: ${formData.shuttle_name}\nPlate Number: ${formData.shuttle_plate_number}\nColor: ${formData.shuttle_color}\nLandmark: ${formData.shuttle_landmark}\nPassenger Capacity: ${formData.passenger_capacity}\nWorking Condition: ${formData.working_condition}`;
-
       // Update state to set receipt content
       setReceiptContent(receipt);
       clearFormData();

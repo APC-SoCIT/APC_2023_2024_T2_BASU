@@ -3,6 +3,7 @@
 use App\Events\SendLocation;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ShuttleFormController;
 use App\Http\Controllers\TripController;
 use Illuminate\Http\Request;
@@ -66,5 +67,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
     Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
 
-
+    //Reservation Controller
+    Route::get('/reservation', [ReservationController::class, 'get']);
+    Route::put('/reservation/{id}', [ReservationController::class, 'update']);
+    Route::delete('/inquire/reservation/{id}', [ReservationController::class, 'delete']);
+    Route::get('/student/reservation/list', [ReservationController::class, 'get']);
+    Route::post('/inquire/reservation', [ReservationController::class, 'create']);
+    Route::get('/inquire/reservation/{id}', [ReservationController::class, 'show']);
 });

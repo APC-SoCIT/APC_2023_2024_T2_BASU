@@ -11,12 +11,13 @@ const StateContext = createContext({
   setCurrentUser: () => {},
   setUserToken: () => {},
   setRole: () => {},
-
   setLocation: () => {},
   location: {
     lat: null,
     lng: null,
   },
+
+
 });
 
 export const ContextProvider = ({ children }) => {
@@ -38,34 +39,29 @@ export const ContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Fetch user data from backend or local storage
     const fetchUserData = async () => {
       const storedToken = localStorage.getItem("TOKEN");
       if (storedToken) {
-        // Fetch user data using stored token
         try {
           const response = await axiosClient.get("/me");
           setCurrentUser(response.data);
-          setRole(response.data.role); // Set the role extracted from user data
+          setRole(response.data.role);
         } catch (error) {
-          // Handle error (e.g., token expired, network error)
           console.error("Failed to fetch user data:", error);
         }
       }
-      setLoading(false); // Set loading to false after fetching user data
+      setLoading(false);
     };
 
     fetchUserData();
   }, []);
 
-  // Initialize state from localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("TOKEN");
     if (storedToken) _setUserToken(storedToken);
   }, []);
 
   if (loading) {
-    // Render the LoadingModal component while loading
     return <LoadingModal />;
   }
 

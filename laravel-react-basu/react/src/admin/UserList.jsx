@@ -24,7 +24,6 @@ import TButton from "../components/core/TButton";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import Person2Icon from "@mui/icons-material/Person2";
 import FlightClassIcon from "@mui/icons-material/FlightClass";
-import UserSearch from "../styling/UserSearch";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
@@ -34,15 +33,14 @@ export default function UserList() {
   const [error, setError] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [userIdToDelete, setUserIdToDelete] = useState(null); // New state to store the user ID to delete
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setLoading(true);
     axiosClient
       .get("/users")
       .then((response) => {
-        // Filter out users with role 1
         const filteredUsers = response.data.filter(
           (user) => parseInt(user.role) !== 1
         );
@@ -56,7 +54,6 @@ export default function UserList() {
       });
   }, []);
 
-  // Function to render role name based on role number
   const renderRoleName = (role) => {
     switch (role) {
       case 2:
@@ -68,7 +65,6 @@ export default function UserList() {
     }
   };
 
-  // Function to handle search
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
     const filtered = users.filter((user) =>
@@ -77,32 +73,27 @@ export default function UserList() {
     setFilteredUsers(filtered);
   };
 
-  // Function to handle opening the confirmation dialog
   const handleOpenDialog = (userId) => {
     setUserIdToDelete(userId);
     setOpenDialog(true);
   };
 
-  // Function to handle closing the confirmation dialog
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setUserIdToDelete(null);
   };
 
-  // Function to handle deleting the user after confirmation
   const handleDeleteConfirmed = async () => {
     try {
       await axiosClient.delete(`/users/${userIdToDelete}`);
-      // After successful deletion, reload the page
       window.location.reload();
     } catch (error) {
       console.error("Error deleting user:", error);
-      // Handle error, e.g., display an error message to the user
     }
   };
 
   const deleteUser = (userId) => {
-    handleOpenDialog(userId); // Trigger confirmation dialog before deleting the user
+    handleOpenDialog(userId);
   };
 
   return (
@@ -124,7 +115,6 @@ export default function UserList() {
         )}
         {!loading && !error && (
           <>
-            {/* Search bar */}
             <TextField
               fullWidth
               variant="outlined"
@@ -147,42 +137,10 @@ export default function UserList() {
                 <Table aria-label="user table">
                   <TableHead>
                     <TableRow>
-                      <TableCell
-                        sx={{
-                          fontWeight: "bold",
-                          color: "darkblue",
-                          fontFamily: "monospace",
-                        }}
-                      >
-                        Name
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontWeight: "bold",
-                          color: "darkblue",
-                          fontFamily: "monospace",
-                        }}
-                      >
-                        Email
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontWeight: "bold",
-                          color: "darkblue",
-                          fontFamily: "monospace",
-                        }}
-                      >
-                        Role
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontWeight: "bold",
-                          color: "darkblue",
-                          fontFamily: "monospace",
-                        }}
-                      >
-                        Actions
-                      </TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Role</TableCell>
+                      <TableCell>Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -234,14 +192,13 @@ export default function UserList() {
             )}
           </>
         )}
-        {/* Confirmation dialog */}
         <Dialog
           open={openDialog}
           onClose={handleCloseDialog}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Delete User"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Delete User</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Are you sure you want to delete this user?

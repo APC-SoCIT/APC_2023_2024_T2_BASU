@@ -70,7 +70,7 @@ export const getLocation = async () => {
     const response = await axiosClient.get("/location");
     return response.data;
   } catch (error) {
-    throw error.response.data; // Throw meaningful error message
+    throw error.response.data;
   }
 };
 
@@ -90,7 +90,7 @@ export const getShuttleForm = async () => {
     const response = await axiosClient.get("/shuttle/storage");
     return response.data;
   } catch (error) {
-    throw error.response.data; // Throw meaningful error message
+    throw error.response.data;
   }
 };
 
@@ -110,6 +110,43 @@ export const handleShuttleSelect = async (driverDetails) => {
     return response.data;
   } catch (error) {
     throw error.response.data;
+  }
+};
+
+// Function to get shuttle form
+export const postReservation = async (formData) => {
+  try {
+    const response = await axiosClient.post("/inquire/reservation", formData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getReservation = async () => {
+  try {
+    const response = await axiosClient.get("/student/reservation/list");
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getReservationAdmin = async () => {
+  try {
+    const response = await axiosClient.get("/reservation");
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const updateReservationAdmin = async (reservationId, newData) => {
+  try {
+    const response = await axiosClient.put(`/reservation/${reservationId}`, newData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data; // Throw meaningful error message
   }
 };
 

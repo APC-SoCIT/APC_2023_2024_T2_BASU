@@ -71,13 +71,18 @@ class AuthController extends Controller
         return $request->user();
     }
 
-    public function getUser()
+    public function getUser(Request $request)
     {
         try {
-            // Fetch all users from the User model
-            $users = User::all();
+            // Get the search query from the request
+            $searchQuery = $request->query('q');
 
-            // Return JSON response with all user details
+            // Query users based on the search query
+            $users = User::where('name', 'like', '%' . $searchQuery . '%')
+                         ->orWhere('email', 'like', '%' . $searchQuery . '%')
+                         ->get();
+
+            // Return JSON response with filtered user details
             return response()->json($users);
         } catch (\Exception $e) {
             // Handle exceptions (e.g., database error) and return error response

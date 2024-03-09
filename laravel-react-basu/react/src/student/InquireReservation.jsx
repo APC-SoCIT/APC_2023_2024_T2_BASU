@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import PageComponent from "../components/PageComponent";
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
-import Calendar from "../components/Calendar"; // Import your Calendar component
+import Calendar from "../components/Calendar";
+import { postShuttleForm } from "../axios";
 
 export default function InquireReservation() {
   const [passengers, setPassengers] = useState([{ id: 1, name: "" }]);
   const [nextId, setNextId] = useState(2);
+  const [loading, setLoading] = useState(false);
 
   const addPassenger = () => {
     setPassengers([...passengers, { id: nextId, name: "" }]);
@@ -26,7 +28,27 @@ export default function InquireReservation() {
   };
 
   const handleDateSelect = (date) => {
-    setSelectedDate(date);
+    // Handle date selection
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData(e.target);
+
+      // Make POST request to create reservation
+      const response = await postShuttleForm(formData);
+
+      console.log("Reservation created:", response.data);
+      // Handle success response, e.g., show notification, redirect user
+    } catch (error) {
+      console.error("Error creating reservation:", error);
+      // Handle error, e.g., show error message to user
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +60,7 @@ export default function InquireReservation() {
         </TButton>
       }
     >
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Left Column */}
           <div className="sm:col-span-1">
@@ -100,61 +122,6 @@ export default function InquireReservation() {
                 </div>
               </div>
             </div>
-            <div className="sm:col-span-1">
-              {/*Second Left Border */}
-              <div className="bg-white overflow-hidden shadow rounded-lg mt-5">
-                <div className="px-4 py-5 sm:px-6">
-                  <h2 className="text-lg font-medium text-gray-900">
-                    Passenger Details
-                  </h2>
-                  <p className="mt-1 text-sm text-gray-600">
-                    Provide the list of names of all students & faculty
-                    involved.
-                  </p>
-                </div>
-                <div className="px-4 py-5 sm:p-6">
-                  {passengers.map((passenger) => (
-                    <div
-                      className="col-span-1 flex items-center"
-                      key={passenger.id}
-                    >
-                      <label
-                        htmlFor={`name-${passenger.id}`}
-                        className="block text-sm font-medium text-gray-900 mr-3"
-                      >
-                        Passenger
-                      </label>
-                      <input
-                        type="text"
-                        id={`name-${passenger.id}`}
-                        name={`name-${passenger.id}`}
-                        className="mt-1 flex-grow block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                        value={passenger.name}
-                        onChange={(e) =>
-                          handlePassengerChange(passenger.id, e.target.value)
-                        }
-                      />
-                      <button
-                        type="button"
-                        className="ml-3 px-3 py-2 bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                        onClick={() => removePassenger(passenger.id)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                  <div className="col-span-1">
-                    <button
-                      type="button"
-                      className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      onClick={addPassenger}
-                    >
-                      Add Passenger
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Right Column */}
@@ -197,68 +164,64 @@ export default function InquireReservation() {
                     className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="col-span-1 mt-2">
-                  <label
-                    htmlFor=""
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    id=""
-                    name=""
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="col-span-1 mt-2">
-                  <label
-                    htmlFor=""
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    id=""
-                    name=""
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="col-span-1 mt-2">
-                  <label
-                    htmlFor=""
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    id=""
-                    name=""
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="col-span-1 mt-2">
-                  <label
-                    htmlFor=""
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    id=""
-                    name=""
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
-                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/*Bottom Page */}
+        {/* Add passenger details section */}
+        {/* Second Left Border */}
+        <div className="bg-white overflow-hidden shadow rounded-lg mt-5">
+          <div className="px-4 py-5 sm:px-6">
+            <h2 className="text-lg font-medium text-gray-900">
+              Passenger Details
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Provide the list of names of all students & faculty involved.
+            </p>
+          </div>
+          <div className="px-4 py-5 sm:p-6">
+            {passengers.map((passenger) => (
+              <div className="col-span-1 flex items-center" key={passenger.id}>
+                <label
+                  htmlFor={`name-${passenger.id}`}
+                  className="block text-sm font-medium text-gray-900 mr-3"
+                >
+                  Passenger
+                </label>
+                <input
+                  type="text"
+                  id={`name-${passenger.id}`}
+                  name={`passenger[]`}
+                  className="mt-1 flex-grow block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  value={passenger.name}
+                  onChange={(e) =>
+                    handlePassengerChange(passenger.id, e.target.value)
+                  }
+                />
+                <button
+                  type="button"
+                  className="ml-3 px-3 py-2 bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  onClick={() => removePassenger(passenger.id)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <div className="col-span-1">
+              <button
+                type="button"
+                className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={addPassenger}
+              >
+                Add Passenger
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Add calendar and reservation details section */}
+        {/* Bottom Page */}
         <div
           className="bg-white overflow-hidden shadow rounded-lg mt-5 p-2 md:p-6 flex flex-col md:flex-row"
           style={{ marginBottom: "20px", padding: "5px" }}
@@ -297,6 +260,7 @@ export default function InquireReservation() {
           </div>
         </div>
 
+        {/* Add buttons for Cancel and Save */}
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
             type="button"
