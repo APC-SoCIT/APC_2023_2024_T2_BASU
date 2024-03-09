@@ -18,6 +18,11 @@ import Reservation from "./admin/Reservation";
 import StudentReservation from "./student/StudentReservation";
 import ShuttleForm from "./admin/ShuttleForm";
 import ShuttleStorage from "./admin/ShuttleStorage";
+import Location from "./views/Location";
+import Map from "./views/Map";
+import Trip from "./views/Trip";
+import ShuttleSelect from "./views/ShuttleSelect";
+import ServiceStart from "./views/ServiceStart";
 
 // Define role constants
 const RoleRouteGuard = ({ allowedRoles, children }) => {
@@ -90,10 +95,32 @@ const router = createBrowserRouter([
       },
       {
         path: "/student/reservation/list",
-        element:
-        <RoleRouteGuard allowedRoles={[2]}>
-        <StudentReservation />
-      </RoleRouteGuard>
+        element: (
+          <RoleRouteGuard allowedRoles={[2]}>
+            <StudentReservation />
+          </RoleRouteGuard>
+        ),
+      },
+      //Shuttle Tracker
+      {
+        path: "/location",
+        element: <Location />,
+      },
+      {
+        path: "/location/map",
+        element: <Map />,
+      },
+      {
+        path: "/location/map/trip",
+        element: <Trip />,
+      },
+      {
+        path: "/service/shuttleselect",
+        element: <ShuttleSelect />,
+      },
+      {
+        path: "/service/shuttleselect/servicestart",
+        element: <ServiceStart />,
       },
     ],
   },

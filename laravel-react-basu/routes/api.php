@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\SendLocation;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ShuttleFormController;
@@ -19,46 +20,51 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 //Public Routes
-Route::post('/account/register', [AuthController::class, 'register']);
-Route::post('/signup', [AuthController::class,'signup']);
-Route::post('/login', [AuthController::class,'login']);
-Route::get('/users', [AuthController::class, 'getUser']);
-
-
-Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
-
-//Routes for Shuttle Storage
-Route::post('/shuttle/form', [ShuttleFormController::class,'post']);
-Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
-Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
-
-
-//Live Tracking:
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/login', [AuthController::class, 'login']);
 
 
 //Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
+
+    //Credential Authentication
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
+    //Driver Accounts
     Route::get('/driver', [DriverController::class, 'show']);
     Route::post('/driver', [DriverController::class, 'update']);
 
+    //Location Tracking
     Route::post('trip', [TripController::class, 'store']);
     Route::get('trip/{trip}', [TripController::class, 'show']);
-
     Route::post('trip/{trip}/accept', [TripController::class, 'accept']);
     Route::post('trip/{trip}/start', [TripController::class, 'start']);
     Route::post('trip/{trip}/end', [TripController::class, 'end']);
     Route::post('trip/{trip}/location', [TripController::class, 'location']);
 
-    Route::get('/user', function(Request $request){
+    //Live Tracking:
+    Route::post('/map', function (Request $request) {
+        $lat = $request->input('lat');
+        $long = $request->input('long');
+        $location = ["lat" => $lat, "long" => $long];
+        event(new SendLocation($location));
+        return response()->json(['status' => 'success', 'data' => $location]);
+    });
+
+    //Account Registration
+    Route::post('/account/register', [AuthController::class, 'register']);
+    Route::get('/users', [AuthController::class, 'getUser']);
+    Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
+    Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    //Routes for Shuttle Storage
+    Route::post('/shuttle/form', [ShuttleFormController::class, 'post']);
+    Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
+    Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
+
+
 });
-
-
-
-

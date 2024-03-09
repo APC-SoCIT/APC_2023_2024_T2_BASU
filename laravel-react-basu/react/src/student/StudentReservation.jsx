@@ -13,7 +13,7 @@ export default function StudentReservation() {
         </TButton>
       }
     >
-Hello World
+      Hello World
     </PageComponent>
   );
 }

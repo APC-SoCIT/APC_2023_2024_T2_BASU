@@ -11,6 +11,12 @@ const StateContext = createContext({
   setCurrentUser: () => {},
   setUserToken: () => {},
   setRole: () => {},
+
+  setLocation: () => {},
+  location: {
+    lat: null,
+    lng: null,
+  },
 });
 
 export const ContextProvider = ({ children }) => {
@@ -19,7 +25,8 @@ export const ContextProvider = ({ children }) => {
     localStorage.getItem("TOKEN") || ""
   );
   const [role, setRole] = useState("");
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [location, setLocation] = useState({ lat: null, lng: null });
+  const [loading, setLoading] = useState(true);
 
   const setUserToken = (token) => {
     if (token) {
@@ -71,6 +78,8 @@ export const ContextProvider = ({ children }) => {
         setUserToken,
         role,
         setRole,
+        location,
+        setLocation,
       }}
     >
       {children}

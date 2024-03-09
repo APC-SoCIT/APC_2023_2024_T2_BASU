@@ -104,4 +104,13 @@ export const deleteShuttleForm = async (shuttleId) => {
   }
 };
 
+export const handleShuttleSelect = async (driverDetails) => {
+  try {
+    const response = await axiosClient.post("/driver", driverDetails);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export default axiosClient;
