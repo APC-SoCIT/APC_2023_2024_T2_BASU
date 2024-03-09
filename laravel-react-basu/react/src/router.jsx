@@ -90,7 +90,7 @@ const router = createBrowserRouter([
         path: "/inquire/reservation",
         element: (
           <RoleRouteGuard allowedRoles={[2]}>
-            <InquireReservations />
+            <InquireReservation />
           </RoleRouteGuard>
         ),
       },
