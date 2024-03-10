@@ -36,7 +36,7 @@ class ShuttleFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function post(Request $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'shuttle_name' => 'required',
@@ -45,11 +45,11 @@ class ShuttleFormController extends Controller
             'shuttle_landmark' => 'required',
             'passenger_capacity' => 'required',
             'working_condition' => 'required',
-            'png_file' => 'image|mimes:png,jpg,jpeg|max:2048',
-            'jpg_file' => 'image|mimes:png,jpg,jpeg|max:2048',
+            'png_file' => '|image|mimes:png,jpg,jpeg|max:2048',
+            'jpg_file' => '|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
-        $shuttleForm = ShuttleForm::create($validatedData);
+        $shuttleForms = ShuttleForm::create($validatedData);
 
         return response()->json(['success' => true, 'message' => 'Shuttle form created successfully.'], 200);
     }
@@ -76,8 +76,8 @@ class ShuttleFormController extends Controller
     public function delete($id)
     {
         try {
-            $shuttleForm = ShuttleForm::findOrFail($id);
-            $shuttleForm->delete();
+            $shuttleForms = ShuttleForm::findOrFail($id);
+            $shuttleForms->delete();
             return response()->json(['success' => true, 'message' => 'Shuttle form deleted successfully.'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to delete shuttle form.'], Response::HTTP_INTERNAL_SERVER_ERROR);

@@ -10,7 +10,7 @@ export default function ShuttleForm() {
     shuttle_name: "",
     shuttle_plate_number: "",
     shuttle_color: "",
-    design_mark: "",
+    shuttle_landmark: "",
     passenger_capacity: "",
     working_condition: "",
   });
@@ -21,8 +21,15 @@ export default function ShuttleForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update state to show modal
-      setShowModal(true);
+      // Call the function to post shuttle form data
+      const response = await postShuttleForm(formData);
+      // Generate receipt content
+      const receipt = `Shuttle Name: ${formData.shuttle_name}\nPlate Number: ${formData.shuttle_plate_number}\nColor: ${formData.shuttle_color}\nLandmark: ${formData.shuttle_landmark}\nPassenger Capacity: ${formData.passenger_capacity}\nWorking Condition: ${formData.working_condition}`;
+      // Update state to set receipt content
+      setReceiptContent(receipt);
+      clearFormData();
+      closeModal();
+      window.location.reload();
     } catch (error) {
       handleError(error);
     }

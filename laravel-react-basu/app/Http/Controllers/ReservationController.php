@@ -89,7 +89,7 @@ class ReservationController extends Controller
             'status' => 'required|string',
             'start_time' => 'required|date',
             'end_time' => 'required|date',
-            'shuttle' => 'required|exists:shuttle_forms,id', // Ensure the provided shuttle ID exists in the shuttle_forms table
+            'shuttle' => 'nullable|string', // Ensure the provided shuttle ID exists in the shuttle_forms table
         ]);
 
         // Find reservation by ID

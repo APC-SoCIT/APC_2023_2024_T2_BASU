@@ -31,6 +31,15 @@ axiosClient.interceptors.response.use(
   }
 );
 
+// Function to generate UUID (Universally Unique Identifier)
+const generateUUID = () => {
+  // Generate a random UUID
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
 // Function to get users
 export const getUsers = async () => {
   try {
@@ -74,15 +83,23 @@ export const getLocation = async () => {
   }
 };
 
-// Function to post shuttle form
 export const postShuttleForm = async (formData) => {
   try {
-    const response = await axiosClient.post("/shuttle/form", formData);
+    // Generate UUID for shuttle_id
+    const shuttleId = generateUUID();
+
+    // Adjust form data to include shuttle_id
+    const updatedFormData = { ...formData, shuttle_id: shuttleId };
+
+    // Send form data to the backend API
+    const response = await axiosClient.post("/shuttle/form", updatedFormData);
     return response.data;
   } catch (error) {
     throw error.response.data;
   }
 };
+
+
 
 // Function to get shuttle form
 export const getShuttleForm = async () => {

@@ -63,7 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     //Routes for Shuttle Storage
-    Route::post('/shuttle/form', [ShuttleFormController::class, 'post']);
+    Route::post('/shuttle/form', [ShuttleFormController::class, 'store']);
     Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
     Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
 
