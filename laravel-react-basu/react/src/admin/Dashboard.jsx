@@ -9,16 +9,19 @@ import {
   CheckBadgeIcon,
   ClockIcon,
   CogIcon,
+  EyeIcon,
   InboxArrowDownIcon,
   KeyIcon,
 } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
-import { getRegisteredDrivers, getRegisteredShuttles, getRegisteredStudents } from "../axios";
+import { getOnServiceShuttles, getOnStandShuttles, getRegisteredDrivers, getRegisteredShuttles, getRegisteredStudents } from "../axios";
 
 export default function Dashboard() {
-  const [registeredShuttles, setRegisteredShuttles] = useState(0);
-  const [registeredDrivers, setRegisteredDrivers] = useState(0);
-  const [registeredStudents, setRegisteredStudents] = useState(0);
+  const [registeredShuttles, setRegisteredShuttles] = useState("loading");
+  const [registeredDrivers, setRegisteredDrivers] = useState("loading");
+  const [registeredStudents, setRegisteredStudents] = useState("loading");
+  const [onServiceShuttles, setOnServiceShuttles] = useState("loading");
+  const [onStandShuttles, setOnStandShuttles] = useState("loading");
 
   useEffect(() => {
     fetchDashboardData();
@@ -26,13 +29,17 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
+      const onServiceCount = await getOnServiceShuttles();
+      const onStandCount = await getOnStandShuttles();
       const shuttleCount = await getRegisteredShuttles();
       const driversCount = await getRegisteredDrivers();
       const studentsCount = await getRegisteredStudents();
 
-      setRegisteredShuttles(shuttleCount); // Update state with the count of registered shuttles
+      setRegisteredShuttles(shuttleCount);
       setRegisteredDrivers(driversCount);
       setRegisteredStudents(studentsCount);
+      setOnServiceShuttles(onServiceCount);
+      setOnStandShuttles(onStandCount);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     }
@@ -101,7 +108,7 @@ export default function Dashboard() {
                     SHUTTLE ON-SERVICE
                   </h2>
                   <p className="text-6xl text-center text-blue-500 font-mono font-extrabold">
-                    7
+                    {onServiceShuttles}
                   </p>
                   <div className="flex justify-center mt-2">
                     <Button variant="contained" color="primary" size="small">
@@ -115,7 +122,7 @@ export default function Dashboard() {
                     SHUTTLE ON-STAND BY
                   </h2>
                   <p className="text-6xl text-center text-blue-500 font-mono font-extrabold">
-                    7
+                    {onStandShuttles}
                   </p>
                   <div className="flex justify-center mt-2">
                     <Button variant="contained" color="primary" size="small">

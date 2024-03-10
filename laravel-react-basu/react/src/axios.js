@@ -178,6 +178,24 @@ export const getRegisteredShuttles = async () => {
   }
 };
 
+export const getOnStandShuttles = async () => {
+  try {
+    const response = await axiosClient.get("/dashboard");
+    return response.data.onStandCount;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getOnServiceShuttles = async () => {
+  try {
+    const response = await axiosClient.get("/dashboard");
+    return response.data.onServiceCount;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const getRegisteredDrivers = async () => {
   try {
     const response = await axiosClient.get("/dashboard");

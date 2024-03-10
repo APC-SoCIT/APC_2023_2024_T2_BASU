@@ -107,6 +107,8 @@ class AuthController extends Controller
     public function getDashboardData()
     {
         $shuttleCount = ShuttleForm::count();
+        $onServiceCount = ShuttleForm::where('working_condition', 'Available')->count();
+        $onStandCount = ShuttleForm::where('working_condition', 'Under Maintenance')->count();
         $registeredDriversCount = User::where('role', '3')->count();
         $registeredStudentsCount = User::where('role', '2')->count();
 
@@ -114,6 +116,8 @@ class AuthController extends Controller
             'registeredDriversCount' => $registeredDriversCount,
             'registeredStudentsCount' => $registeredStudentsCount,
             'shuttleCount' => $shuttleCount,
+            'onServiceCount' => $onServiceCount,
+            'onStandCount' => $onStandCount,
         ], 200);
     }
 }
