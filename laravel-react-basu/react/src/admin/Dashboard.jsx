@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Grid, Paper } from "@mui/material";
 import { motion } from "framer-motion"; // Import motion from framer-motion library for animations
@@ -13,8 +13,31 @@ import {
   KeyIcon,
 } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
+import { getRegisteredDrivers, getRegisteredShuttles, getRegisteredStudents } from "../axios";
 
 export default function Dashboard() {
+  const [registeredShuttles, setRegisteredShuttles] = useState(0);
+  const [registeredDrivers, setRegisteredDrivers] = useState(0);
+  const [registeredStudents, setRegisteredStudents] = useState(0);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const shuttleCount = await getRegisteredShuttles();
+      const driversCount = await getRegisteredDrivers();
+      const studentsCount = await getRegisteredStudents();
+
+      setRegisteredShuttles(shuttleCount); // Update state with the count of registered shuttles
+      setRegisteredDrivers(driversCount);
+      setRegisteredStudents(studentsCount);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-gray-400 to-indigo-300 p-4 py-10">
       <div className="mx-auto px-4 lg:px-0 lg:max-w-6xl">
@@ -33,7 +56,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Paper elevation={3} className="rounded-lg p-4">
                   <h2 className="text-lg font-semibold mb-2 font-mono text-center">
-                    IN-PROCESS RESERVATION
+                    INQUIRED RESERVATIONS
                   </h2>
                   <p>Content for the first column goes here...</p>
                 </Paper>
@@ -64,7 +87,7 @@ export default function Dashboard() {
                     REGISTERED SHUTTLES
                   </h2>
                   <p className="text-6xl text-center text-blue-500 font-mono font-extrabold">
-                    7
+                    {registeredShuttles}
                   </p>
                   <div className="flex justify-center mt-2">
                     <Button variant="contained" color="primary" size="small">
@@ -172,7 +195,7 @@ export default function Dashboard() {
                     TOTAL REGISTERED DRIVERS
                   </h2>
                   <p className="text-6xl text-center text-blue-500 font-mono font-extrabold">
-                    8
+                    {registeredDrivers}
                   </p>
                   <div className="flex flex-col lg:flex-row justify-center mt-4 pt-4">
                     <TButton
@@ -191,10 +214,10 @@ export default function Dashboard() {
 
                 <Paper elevation={3} className="rounded-lg p-4">
                   <h2 className="text-lg font-semibold mb-2 font-mono text-center">
-                    TOTAL REGISTERED USERS
+                    TOTAL REGISTERED STUDENTS
                   </h2>
                   <p className="text-6xl text-center text-blue-500 font-mono font-extrabold">
-                    7
+                    {registeredStudents}
                   </p>
                   <div className="flex flex-col lg:flex-row justify-center mt-4 pt-4">
                     <TButton

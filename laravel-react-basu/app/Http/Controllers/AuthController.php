@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
+use App\Models\ShuttleForm;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,7 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $user =Auth::user();
+        $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
 
         return response([
@@ -79,8 +80,8 @@ class AuthController extends Controller
 
             // Query users based on the search query
             $users = User::where('name', 'like', '%' . $searchQuery . '%')
-                         ->orWhere('email', 'like', '%' . $searchQuery . '%')
-                         ->get();
+                ->orWhere('email', 'like', '%' . $searchQuery . '%')
+                ->get();
 
             // Return JSON response with filtered user details
             return response()->json($users);
@@ -101,5 +102,18 @@ class AuthController extends Controller
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully'], 200);
+    }
+
+    public function getDashboardData()
+    {
+        $shuttleCount = ShuttleForm::count();
+        $registeredDriversCount = User::where('role', '3')->count();
+        $registeredStudentsCount = User::where('role', '2')->count();
+
+        return response()->json([
+            'registeredDriversCount' => $registeredDriversCount,
+            'registeredStudentsCount' => $registeredStudentsCount,
+            'shuttleCount' => $shuttleCount,
+        ], 200);
     }
 }

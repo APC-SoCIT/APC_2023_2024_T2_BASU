@@ -34,8 +34,9 @@ axiosClient.interceptors.response.use(
 // Function to generate UUID (Universally Unique Identifier)
 const generateUUID = () => {
   // Generate a random UUID
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 };
@@ -99,8 +100,6 @@ export const postShuttleForm = async (formData) => {
   }
 };
 
-
-
 // Function to get shuttle form
 export const getShuttleForm = async () => {
   try {
@@ -160,10 +159,40 @@ export const getReservationAdmin = async () => {
 
 export const updateReservationAdmin = async (reservationId, newData) => {
   try {
-    const response = await axiosClient.put(`/reservation/${reservationId}`, newData);
+    const response = await axiosClient.put(
+      `/reservation/${reservationId}`,
+      newData
+    );
     return response.data;
   } catch (error) {
     throw error.response.data; // Throw meaningful error message
+  }
+};
+
+export const getRegisteredShuttles = async () => {
+  try {
+    const response = await axiosClient.get("/dashboard");
+    return response.data.shuttleCount;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getRegisteredDrivers = async () => {
+  try {
+    const response = await axiosClient.get("/dashboard");
+    return response.data.registeredDriversCount;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getRegisteredStudents = async () => {
+  try {
+    const response = await axiosClient.get("/dashboard");
+    return response.data.registeredStudentsCount;
+  } catch (error) {
+    throw error.response.data;
   }
 };
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ShuttleFormController;
 use App\Http\Controllers\TripController;
+use App\Models\ShuttleForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,7 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Routes for Shuttle Storage
     Route::post('/shuttle/form', [ShuttleFormController::class, 'store']);
-    Route::get('shuttle/storage', [ShuttleFormController::class, 'get']);
+    Route::get('/shuttle/storage', [ShuttleFormController::class, 'get']);
     Route::delete('/shuttle/storage/{id}', [ShuttleFormController::class, 'delete']);
 
     //Reservation Controller
@@ -74,4 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/student/reservation/list', [ReservationController::class, 'get']);
     Route::post('/inquire/reservation', [ReservationController::class, 'create']);
     Route::get('/inquire/reservation/{id}', [ReservationController::class, 'show']);
+
+    //Routes for Dashboard
+    Route::get('/dashboard', [AuthController::class, 'getDashboardData']);
 });
