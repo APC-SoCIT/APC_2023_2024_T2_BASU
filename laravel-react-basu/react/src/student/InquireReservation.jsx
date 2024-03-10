@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageComponent from "../components/PageComponent";
 import {
   TextField,
@@ -9,8 +9,9 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import { postReservation } from "../axios";
+import { postReservation, getUsers } from "../axios";
 import { useStateContext } from "../contexts/ContextProvider";
+import Autocomplete from "@mui/material/Autocomplete";
 
 export default function InquireReservation() {
   const { currentUser } = useStateContext();
@@ -24,8 +25,25 @@ export default function InquireReservation() {
     status: "Pending",
     start_time: "",
     end_time: "",
+    passengers: [],
   });
   const [error, setError] = useState(null);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const userList = await getUsers();
+        // Filter users with role 2
+        const filteredUsers = userList.filter(user => user.role === 2);
+        console.log("Users:", filteredUsers);
+        setUsers(filteredUsers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    }
+    fetchUsers();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,6 +63,21 @@ export default function InquireReservation() {
     }));
   };
 
+  const handlePassengerChange = (event, newValue) => {
+    console.log("Selected users:", newValue);
+    if (Array.isArray(newValue)) {
+      setFormData((prevData) => ({
+        ...prevData,
+        passengers: newValue,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        passengers: [],
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -59,11 +92,12 @@ export default function InquireReservation() {
         landmark: "",
         start_time: "",
         end_time: "",
+        passengers: [],
       });
-      setError(null); // Reset error state after successful submission
+      setError(null);
     } catch (error) {
       console.error("Error creating reservation:", error);
-      setError(error.message); // Set error state to error message from axios
+      setError(error.message);
     }
   };
 
@@ -74,11 +108,9 @@ export default function InquireReservation() {
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="mb-10">
-              {error && <Alert severity="error">{error}</Alert>}{" "}
+                {error && <Alert severity="error">{error}</Alert>}
               </div>
-              {/* Display error message */}
               <Grid container spacing={2}>
-                {/* Form fields */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
@@ -90,6 +122,27 @@ export default function InquireReservation() {
                     InputProps={{
                       readOnly: true,
                     }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Autocomplete
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    multiple
+                    id="passengers"
+                    options={users}
+                    getOptionLabel={(option) => option.email}
+                    value={formData.passengers}
+                    onChange={handlePassengerChange}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Passengers"
+                        placeholder="Select passengers"
+                      />
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>

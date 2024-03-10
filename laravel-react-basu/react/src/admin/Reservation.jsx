@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PageComponent from "../components/PageComponent";
 import { getReservationAdmin, updateReservationAdmin } from "../axios"; // Import the functions to get and update reservations data
+import TButton from "../components/core/TButton";
+import { CalendarIcon } from "@heroicons/react/24/outline";
 
 export default function StudentReservation() {
   const [reservations, setReservations] = useState([]);
@@ -23,6 +25,18 @@ export default function StudentReservation() {
 
     fetchReservations();
   }, []);
+
+  const formatDateTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
 
   const handleUpdate = async () => {
     try {
@@ -101,19 +115,20 @@ export default function StudentReservation() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {reservation.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className={`px-6 py-4 whitespace-nowrap ${reservation.status === "Pending" ? "text-yellow-500" : reservation.status === "Approved" ? "text-green-500" : "text-red-500"}`}>
                     {reservation.status}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {reservation.reason}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button
+                    <TButton
                       onClick={() => openModal(reservation)}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      className="font-mono hover:underline"
+                      color="indigo"
                     >
-                      Details
-                    </button>
+                      Details <CalendarIcon className=" ml-2 w-4 h-5"/>
+                    </TButton>
                   </td>
                 </tr>
               ))}
@@ -202,7 +217,7 @@ export default function StudentReservation() {
                       Start Time
                     </label>
                     <p className="mt-1 text-sm text-gray-500">
-                      {selectedReservation.start_time}
+                      {formatDateTime(selectedReservation.start_time)}
                     </p>
                   </div>
                   <div>
@@ -210,7 +225,7 @@ export default function StudentReservation() {
                       End Time
                     </label>
                     <p className="mt-1 text-sm text-gray-500">
-                      {selectedReservation.end_time}
+                      {formatDateTime(selectedReservation.end_time)}
                     </p>
                   </div>
                   <div>

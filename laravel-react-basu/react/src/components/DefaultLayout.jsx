@@ -6,6 +6,7 @@ import {
   BookmarkSquareIcon,
   ChartBarSquareIcon,
   HomeIcon,
+  InboxIcon,
   MapPinIcon,
   UserCircleIcon,
   UserIcon,
@@ -20,6 +21,7 @@ const navigation = [
   { name: "Home", to: "/", icon: HomeIcon },
   { name: "Dashboard", to: "/dashboard", icon: ChartBarSquareIcon },
   { name: "Reservation", to: "/reservation", icon: BookmarkSquareIcon },
+  { name: "Shuttle", to: "/shuttle/storage", icon: InboxIcon },
   {
     name: "Inquire Reservation",
     to: "/student/reservation/list",
@@ -70,6 +72,7 @@ export default function DefaultLayout() {
         "Home",
         "Dashboard",
         "Reservation",
+        "Shuttle",
         "Tracker",
         "Accounts",
       ].includes(item.name);

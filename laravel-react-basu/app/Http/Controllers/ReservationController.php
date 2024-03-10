@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use App\Models\User;
 
 class ReservationController extends Controller
 {
@@ -20,18 +21,40 @@ class ReservationController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string',
+            'passengers' => 'required|array',
+            'passengers.*.id' => 'required|int', // Assuming each passenger has an 'id'
+            'passengers.*.name' => 'required|string', // Assuming each passenger has a 'name'
             'reason' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
             'landmark' => 'required|string',
-            'passenger' => 'nullable|string',
             'status' => 'required|string',
             'start_time' => 'required|date',
             'end_time' => 'required|date',
         ]);
 
+        // Extract passenger IDs
+        $passengerIds = collect($validatedData['passengers'])->pluck('id')->toArray();
+
         // Create new reservation
-        $reservation = Reservation::create($validatedData);
+        $reservation = new Reservation([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'passengers' => json_encode($passengerIds), // Store passenger IDs as JSON
+            'reason' => $validatedData['reason'],
+            'description' => $validatedData['description'],
+            'location' => $validatedData['location'],
+            'landmark' => $validatedData['landmark'],
+            'status' => $validatedData['status'],
+            'start_time' => $validatedData['start_time'],
+            'end_time' => $validatedData['end_time'],
+        ]);
+
+        $reservation->save();
+
+        // Convert passenger IDs to emails for response
+        $passengerEmails = User::whereIn('id', $passengerIds)->pluck('email')->toArray();
+        $reservation->passengers = $passengerEmails;
 
         return response()->json($reservation, 201);
     }
@@ -40,6 +63,12 @@ class ReservationController extends Controller
     {
         // Find reservation by ID
         $reservation = Reservation::findOrFail($id);
+
+        // Convert passenger IDs to emails for response
+        $passengerIds = json_decode($reservation->passengers);
+        $passengerEmails = User::whereIn('id', $passengerIds)->pluck('email')->toArray();
+        $reservation->passengers = $passengerEmails;
+
         return response()->json($reservation);
     }
 
@@ -49,11 +78,11 @@ class ReservationController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string',
+            'passengers' => 'required|array',
             'reason' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
             'landmark' => 'required|string',
-            'passenger' => 'nullable|string',
             'status' => 'required|string',
             'start_time' => 'required|date',
             'end_time' => 'required|date',

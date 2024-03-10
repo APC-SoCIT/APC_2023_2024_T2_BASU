@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
+            $table->json('passengers')->nullable();
             $table->string('reason');
             $table->string('description');
             $table->string('location');

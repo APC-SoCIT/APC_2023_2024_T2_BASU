@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PageComponent from "../components/PageComponent";
 import TButton from "../components/core/TButton";
 import { InboxArrowDownIcon } from "@heroicons/react/24/outline";
-import { getReservation } from "../axios"; // Import the function to get reservations data
+import { getReservation } from "../axios";
 import { useStateContext } from "../contexts/ContextProvider";
 
 export default function StudentReservation() {
@@ -14,7 +14,6 @@ export default function StudentReservation() {
       try {
         const response = await getReservation();
         if (response && Array.isArray(response)) {
-          // Filter reservations based on the current user's email
           const userReservations = response.filter(reservation => reservation.email === currentUser.email);
           setReservations(userReservations);
         } else {
@@ -27,6 +26,13 @@ export default function StudentReservation() {
 
     fetchReservations();
   }, [currentUser.email]); // Depend on currentUser.email to refetch reservations when email changes
+
+  const formatDateTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
 
   const handleDelete = async (reservationId) => {
     try {
@@ -58,7 +64,10 @@ export default function StudentReservation() {
                   </div>
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Name
+                  Starting Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Ending Date
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Status
@@ -67,7 +76,7 @@ export default function StudentReservation() {
                   Description
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Action
+                  Edit
                 </th>
               </tr>
             </thead>
@@ -83,16 +92,18 @@ export default function StudentReservation() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{reservation.name}</div>
+                    <div className="text-sm font-medium text-gray-900">{formatDateTime(reservation.start_time)}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{formatDateTime(reservation.end_time)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">{reservation.status}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{reservation.description}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
-                      onClick={() => handleDelete(reservation.id)}
-                      className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                      className="font-medium text-blue-600 dark:blue-red-500 hover:underline"
                     >
-                      Delete
+                      Overview
                     </button>
                   </td>
                 </tr>
