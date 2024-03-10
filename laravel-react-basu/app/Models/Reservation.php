@@ -12,14 +12,22 @@ class Reservation extends Model
     protected $fillable = [
         'name',
         'email',
-        'passengers',
         'reason',
         'description',
         'location',
         'landmark',
-        'passenger',
+        'passengers',
         'start_time',
         'end_time',
         'status',
     ];
+
+    protected $casts = [
+        'passengers' => 'array'
+    ];
+
+    public function shuttleForm()
+    {
+        return $this->belongsTo(ShuttleForm::class);
+    }
 }

@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import PageComponent from "../components/PageComponent";
-import { getReservationAdmin, updateReservationAdmin } from "../axios"; // Import the functions to get and update reservations data
+import {
+  getReservationAdmin,
+  getShuttleForm,
+  updateReservationAdmin,
+} from "../axios"; // Import the functions to get and update reservations data
 import TButton from "../components/core/TButton";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
 export default function StudentReservation() {
   const [reservations, setReservations] = useState([]);
   const [selectedReservation, setSelectedReservation] = useState(null);
+  const [shuttles, setShuttles] = useState([]);
+  const [selectedShuttleId, setSelectedShuttleId] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -23,7 +29,22 @@ export default function StudentReservation() {
       }
     };
 
+    const fetchShuttles = async () => {
+      try {
+        // Fetch available shuttles
+        const response = await getShuttleForm();
+        if (!response || !response.data || !Array.isArray(response.data)) {
+          throw new Error("Invalid data format received");
+        }
+        setShuttles(response.data);
+        console.log("Fetched shuttles:", response.data); // Log the fetched shuttles
+      } catch (error) {
+        console.error("Error fetching shuttles:", error);
+      }
+    };
+
     fetchReservations();
+    fetchShuttles();
   }, []);
 
   const formatDateTime = (timestamp) => {
@@ -40,20 +61,55 @@ export default function StudentReservation() {
 
   const handleUpdate = async () => {
     try {
-      const response = await updateReservationAdmin(
+      // Assign the selected shuttle ID to the reservation
+      const updatedReservation = {
+        ...selectedReservation,
+        shuttle: selectedShuttleId, // Use 'shuttle' instead of 'shuttle_id'
+      };
+
+      const responseReservation = await updateReservationAdmin(
         selectedReservation.id,
-        selectedReservation
+        updatedReservation
       );
-      if (response) {
+
+      if (responseReservation) {
         // Update the reservations list with the updated reservation
         const updatedReservations = reservations.map((reservation) =>
           reservation.id === selectedReservation.id
-            ? selectedReservation
+            ? updatedReservation
             : reservation
         );
         setReservations(updatedReservations);
-        setModalOpen(false);
+
+        // Update the selected reservation with the selected shuttle ID
+        setSelectedReservation(updatedReservation); // Update selectedReservation here
       }
+
+      // Update the selected shuttle with the reservation ID
+      const selectedShuttle = shuttles.find(
+        (shuttle) => shuttle.id === selectedShuttleId
+      );
+      if (selectedShuttle) {
+        const updatedShuttle = {
+          ...selectedShuttle,
+          reservation_id: selectedReservation.id,
+        };
+
+        const responseShuttle = await updateShuttleForm(
+          selectedShuttleId,
+          updatedShuttle
+        );
+
+        if (responseShuttle) {
+          // Update the shuttles list with the updated shuttle
+          const updatedShuttles = shuttles.map((shuttle) =>
+            shuttle.id === selectedShuttleId ? updatedShuttle : shuttle
+          );
+          setShuttles(updatedShuttles);
+        }
+      }
+
+      setModalOpen(false);
     } catch (error) {
       console.error("Error updating reservation:", error);
     }
@@ -115,7 +171,15 @@ export default function StudentReservation() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {reservation.name}
                   </td>
-                  <td className={`px-6 py-4 whitespace-nowrap ${reservation.status === "Pending" ? "text-yellow-500" : reservation.status === "Approved" ? "text-green-500" : "text-red-500"}`}>
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap ${
+                      reservation.status === "Pending"
+                        ? "text-yellow-500"
+                        : reservation.status === "Approved"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reservation.status}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -127,7 +191,7 @@ export default function StudentReservation() {
                       className="font-mono hover:underline"
                       color="indigo"
                     >
-                      Details <CalendarIcon className=" ml-2 w-4 h-5"/>
+                      Details <CalendarIcon className=" ml-2 w-4 h-5" />
                     </TButton>
                   </td>
                 </tr>
@@ -233,7 +297,7 @@ export default function StudentReservation() {
                       Passengers
                     </label>
                     <p className="mt-1 text-sm text-gray-500">
-                      {selectedReservation.passenger}
+                      {selectedReservation.passengers}
                     </p>
                   </div>
                 </div>
@@ -264,7 +328,25 @@ export default function StudentReservation() {
                     </button>
                   </div>
                 </div>
+                <div className="mt-10">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Assign Shuttle
+                  </label>
+                  <select
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    value={selectedShuttleId}
+                    onChange={(e) => setSelectedShuttleId(e.target.value)}
+                  >
+                    <option value="">Select a shuttle</option>
+                    {shuttles.map((shuttle) => (
+                      <option key={shuttle.id} value={shuttle.id}>
+                        {shuttle.shuttle_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
               <div className="bg-gray-50 px-4 py-3 sm:px-6 flex justify-end">
                 <button
                   onClick={handleUpdate}

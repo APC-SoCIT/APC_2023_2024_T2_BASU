@@ -35,7 +35,7 @@ export default function InquireReservation() {
       try {
         const userList = await getUsers();
         // Filter users with role 2
-        const filteredUsers = userList.filter(user => user.role === 2);
+        const filteredUsers = userList.filter((user) => user.role === 2);
         console.log("Users:", filteredUsers);
         setUsers(filteredUsers);
       } catch (error) {
@@ -66,11 +66,19 @@ export default function InquireReservation() {
   const handlePassengerChange = (event, newValue) => {
     console.log("Selected users:", newValue);
     if (Array.isArray(newValue)) {
+      // If newValue is already an array, directly update the state
       setFormData((prevData) => ({
         ...prevData,
         passengers: newValue,
       }));
+    } else if (newValue !== null) {
+      // If newValue is not an array but not null, convert it to an array and update the state
+      setFormData((prevData) => ({
+        ...prevData,
+        passengers: [newValue], // Wrap single value in an array
+      }));
     } else {
+      // If newValue is null, reset passengers to an empty array
       setFormData((prevData) => ({
         ...prevData,
         passengers: [],

@@ -14,7 +14,9 @@ export default function StudentReservation() {
       try {
         const response = await getReservation();
         if (response && Array.isArray(response)) {
-          const userReservations = response.filter(reservation => reservation.email === currentUser.email);
+          const userReservations = response.filter(
+            (reservation) => reservation.email === currentUser.email
+          );
           setReservations(userReservations);
         } else {
           console.error("Invalid data format received:", response);
@@ -29,16 +31,23 @@ export default function StudentReservation() {
 
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp);
-    const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
   };
-
 
   const handleDelete = async (reservationId) => {
     try {
       // Perform delete operation
       // Update the reservation list after deletion
-      const updatedReservations = reservations.filter(reservation => reservation.id !== reservationId);
+      const updatedReservations = reservations.filter(
+        (reservation) => reservation.id !== reservationId
+      );
       setReservations(updatedReservations);
     } catch (error) {
       console.error("Error deleting reservation:", error);
@@ -92,16 +101,30 @@ export default function StudentReservation() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{formatDateTime(reservation.start_time)}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatDateTime(reservation.start_time)}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{formatDateTime(reservation.end_time)}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatDateTime(reservation.end_time)}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{reservation.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{reservation.description}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {reservation.status}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {reservation.description}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       className="font-medium text-blue-600 dark:blue-red-500 hover:underline"
+                      onClick={() =>
+                        console.log(
+                          "Passengers type:",
+                          typeof reservation.passengers
+                        )
+                      }
                     >
                       Overview
                     </button>

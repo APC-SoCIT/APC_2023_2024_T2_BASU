@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use App\Models\ShuttleForm;
 use App\Models\User;
 
 class ReservationController extends Controller
@@ -22,8 +23,6 @@ class ReservationController extends Controller
             'name' => 'required|string',
             'email' => 'required|string',
             'passengers' => 'required|array',
-            'passengers.*.id' => 'required|int', // Assuming each passenger has an 'id'
-            'passengers.*.name' => 'required|string', // Assuming each passenger has a 'name'
             'reason' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
@@ -52,11 +51,13 @@ class ReservationController extends Controller
 
         $reservation->save();
 
-        // Convert passenger IDs to emails for response
-        $passengerEmails = User::whereIn('id', $passengerIds)->pluck('email')->toArray();
-        $reservation->passengers = $passengerEmails;
+        // Convert passenger IDs to objects containing id, name, and email
+        $passengers = User::whereIn('id', $passengerIds)->select('id', 'name', 'email')->get();
 
-        return response()->json($reservation, 201);
+        return response()->json([
+            'reservation' => $reservation,
+            'passengers' => $passengers
+        ], 201);
     }
 
     public function show($id)
@@ -64,13 +65,16 @@ class ReservationController extends Controller
         // Find reservation by ID
         $reservation = Reservation::findOrFail($id);
 
-        // Convert passenger IDs to emails for response
+        // Convert passenger IDs to objects containing id and name
         $passengerIds = json_decode($reservation->passengers);
-        $passengerEmails = User::whereIn('id', $passengerIds)->pluck('email')->toArray();
-        $reservation->passengers = $passengerEmails;
+        $passengers = User::whereIn('id', $passengerIds)->select('id', 'name')->get();
 
-        return response()->json($reservation);
+        return response()->json([
+            'reservation' => $reservation,
+            'passengers' => $passengers
+        ]);
     }
+
 
     public function update(Request $request, $id)
     {
@@ -78,7 +82,6 @@ class ReservationController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string',
-            'passengers' => 'required|array',
             'reason' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
@@ -86,11 +89,27 @@ class ReservationController extends Controller
             'status' => 'required|string',
             'start_time' => 'required|date',
             'end_time' => 'required|date',
+            'shuttle' => 'required|exists:shuttle_forms,id', // Ensure the provided shuttle ID exists in the shuttle_forms table
         ]);
 
-        // Find reservation by ID and update
+        // Find reservation by ID
         $reservation = Reservation::findOrFail($id);
+
+        // Update reservation fields
         $reservation->update($validatedData);
+
+        // If shuttle field is provided, associate the reservation with the shuttle form
+        if ($request->has('shuttle')) {
+            // Find shuttle form by ID
+            $shuttleForm = ShuttleForm::find($validatedData['shuttle']);
+            if ($shuttleForm) {
+                // Associate reservation with shuttle form
+                $reservation->shuttleForm()->associate($shuttleForm);
+            }
+        }
+
+        // Save changes
+        $reservation->save();
 
         return response()->json($reservation, 200);
     }

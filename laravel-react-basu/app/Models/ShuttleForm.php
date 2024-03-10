@@ -21,4 +21,9 @@ class ShuttleForm extends Model
         'png_file',
         'jpg_file',
     ];
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

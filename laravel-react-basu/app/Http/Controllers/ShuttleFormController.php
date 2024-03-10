@@ -45,8 +45,8 @@ class ShuttleFormController extends Controller
             'shuttle_landmark' => 'required',
             'passenger_capacity' => 'required',
             'working_condition' => 'required',
-            'png_file' => '|image|mimes:png,jpg,jpeg|max:2048',
-            'jpg_file' => '|image|mimes:png,jpg,jpeg|max:2048',
+            'png_file' => 'image|mimes:png,jpg,jpeg|max:2048',
+            'jpg_file' => 'image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         $shuttleForm = ShuttleForm::create($validatedData);
