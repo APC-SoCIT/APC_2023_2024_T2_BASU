@@ -22,9 +22,11 @@ class Reservation extends Model
         'status',
     ];
 
-    protected $casts = [
-        'passengers' => 'array'
-    ];
+    // Define the relationship with users (passengers)
+    public function passengers()
+{
+    return $this->belongsToMany(User::class, 'reservation_passenger', 'reservation_id', 'passenger_id');
+}
 
     public function shuttleForm()
     {

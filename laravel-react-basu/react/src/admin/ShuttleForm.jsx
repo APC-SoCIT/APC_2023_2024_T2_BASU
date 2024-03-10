@@ -4,6 +4,8 @@ import TButton from "../components/core/TButton";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { postShuttleForm } from "../axios";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function ShuttleForm() {
   const [formData, setFormData] = useState({
@@ -29,7 +31,7 @@ export default function ShuttleForm() {
       setReceiptContent(receipt);
       clearFormData();
       closeModal();
-      window.location.reload();
+      toast.success("Shuttle Vehicle Imported");
     } catch (error) {
       handleError(error);
     }
@@ -98,6 +100,7 @@ export default function ShuttleForm() {
         </TButton>
       }
     >
+      <ToastContainer />
       {/* Display error message */}
       {error && (
         <div className="border bg-white border-red-600 rounded-md p-4 mb-6">

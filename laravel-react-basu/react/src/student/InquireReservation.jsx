@@ -12,6 +12,10 @@ import {
 import { postReservation, getUsers } from "../axios";
 import { useStateContext } from "../contexts/ContextProvider";
 import Autocomplete from "@mui/material/Autocomplete";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import TButton from "../components/core/TButton";
+import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export default function InquireReservation() {
   const { currentUser } = useStateContext();
@@ -34,7 +38,6 @@ export default function InquireReservation() {
     async function fetchUsers() {
       try {
         const userList = await getUsers();
-        // Filter users with role 2
         const filteredUsers = userList.filter((user) => user.role === 2);
         console.log("Users:", filteredUsers);
         setUsers(filteredUsers);
@@ -64,12 +67,16 @@ export default function InquireReservation() {
   };
 
   const handlePassengerChange = (event, newValue) => {
-    console.log("Selected users:", newValue);
+    // Filter out the current user from the newValue array
+    const filteredPassengers = newValue.filter(
+      (user) => user.id !== currentUser.id
+    );
+
     if (Array.isArray(newValue)) {
       // If newValue is already an array, directly update the state
       setFormData((prevData) => ({
         ...prevData,
-        passengers: newValue,
+        passengers: filteredPassengers,
       }));
     } else if (newValue !== null) {
       // If newValue is not an array but not null, convert it to an array and update the state
@@ -91,6 +98,7 @@ export default function InquireReservation() {
     try {
       const response = await postReservation(formData);
       console.log("Reservation created:", response);
+      toast.success("Reservation submitted");
       setFormData({
         name: "",
         email: "",
@@ -110,7 +118,14 @@ export default function InquireReservation() {
   };
 
   return (
-    <PageComponent>
+    <PageComponent
+      buttons={
+        <TButton color="indigo" to="/student/reservation/list">
+          <ArrowLeftEndOnRectangleIcon className="h-6 w-6 mr-2" /> Back to Reservation
+        </TButton>
+      }
+    >
+      <ToastContainer />
       <Box sx={{ display: "flex", justifyContent: "center", m: 1, p: 1 }}>
         <Card sx={{ minWidth: 275 }}>
           <CardContent>

@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 
 export default function Location() {
   const { location, setLocation } = useStateContext();
-
-
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
 

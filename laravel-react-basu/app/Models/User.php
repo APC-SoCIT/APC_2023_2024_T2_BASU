@@ -53,4 +53,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Trip::class);
     }
+
+    /**
+     * Define the relationship with reservations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function reservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'reservation_passenger', 'passenger_id', 'reservation_id');
+    }
 }

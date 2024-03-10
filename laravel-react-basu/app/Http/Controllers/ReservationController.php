@@ -22,7 +22,7 @@ class ReservationController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string',
-            'passengers' => 'required|array',
+            'passengers' => 'required|array', // Expecting an array of passenger IDs
             'reason' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
@@ -32,14 +32,10 @@ class ReservationController extends Controller
             'end_time' => 'required|date',
         ]);
 
-        // Extract passenger IDs
-        $passengerIds = collect($validatedData['passengers'])->pluck('id')->toArray();
-
         // Create new reservation
-        $reservation = new Reservation([
+        $reservation = Reservation::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'passengers' => json_encode($passengerIds), // Store passenger IDs as JSON
             'reason' => $validatedData['reason'],
             'description' => $validatedData['description'],
             'location' => $validatedData['location'],
@@ -49,31 +45,32 @@ class ReservationController extends Controller
             'end_time' => $validatedData['end_time'],
         ]);
 
-        $reservation->save();
+        // Extract passenger IDs
+        $passengerIds = collect($validatedData['passengers'])->pluck('id')->toArray();
 
-        // Convert passenger IDs to objects containing id, name, and email
-        $passengers = User::whereIn('id', $passengerIds)->select('id', 'name', 'email')->get();
+        // Associate passengers with the reservation
+        $reservation->passengers()->attach($passengerIds);
 
-        return response()->json([
-            'reservation' => $reservation,
-            'passengers' => $passengers
-        ], 201);
+        return response()->json($reservation, 201);
     }
+
+
+
 
     public function show($id)
     {
         // Find reservation by ID
         $reservation = Reservation::findOrFail($id);
 
-        // Convert passenger IDs to objects containing id and name
-        $passengerIds = json_decode($reservation->passengers);
-        $passengers = User::whereIn('id', $passengerIds)->select('id', 'name')->get();
+        // Load passengers associated with the reservation
+        $passengers = $reservation->passengers()->select('id', 'name', 'email')->get();
 
         return response()->json([
             'reservation' => $reservation,
             'passengers' => $passengers
         ]);
     }
+
 
 
     public function update(Request $request, $id)
