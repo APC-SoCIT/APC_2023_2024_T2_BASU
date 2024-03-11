@@ -2,12 +2,14 @@ import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { createContext } from "react";
 import axiosClient from "../axios.js";
-import LoadingModal from "../styling/LoadingModal.jsx"; // Adjust the path as per your project structure
+import LoadingModal from "../styling/LoadingModal.jsx";
 
 const StateContext = createContext({
   currentUser: {},
   userToken: null,
   role: null,
+  hasReservations: false,
+  setHasReservations: () => {},
   setCurrentUser: () => {},
   setUserToken: () => {},
   setRole: () => {},
@@ -28,6 +30,7 @@ export const ContextProvider = ({ children }) => {
   const [role, setRole] = useState("");
   const [location, setLocation] = useState({ lat: null, lng: null });
   const [loading, setLoading] = useState(true);
+  const [hasReservations, setHasReservations] = useState(false);
 
   const setUserToken = (token) => {
     if (token) {
@@ -76,6 +79,8 @@ export const ContextProvider = ({ children }) => {
         setRole,
         location,
         setLocation,
+        hasReservations,
+        setHasReservations,
       }}
     >
       {children}

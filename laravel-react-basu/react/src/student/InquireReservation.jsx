@@ -18,7 +18,7 @@ import TButton from "../components/core/TButton";
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export default function InquireReservation() {
-  const { currentUser } = useStateContext();
+  const { currentUser, setCurrentUser } = useStateContext(); // Include setCurrentUser from context
   const [formData, setFormData] = useState({
     name: currentUser.name,
     email: currentUser.email,
@@ -96,12 +96,20 @@ export default function InquireReservation() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Check if the user already has reservations
+      if (currentUser.hasReservations) {
+        // If the user already has reservations, prevent them from creating another one
+        toast.error("You can only create one reservation.");
+        return;
+      }
+
+      // If the user doesn't have reservations, proceed with creating the reservation
       const response = await postReservation(formData);
       console.log("Reservation created:", response);
       toast.success("Reservation submitted");
       setFormData({
-        name: "",
-        email: "",
+        name: currentUser.name,
+        email: currentUser.email,
         reason: "",
         description: "",
         location: "",
@@ -111,6 +119,11 @@ export default function InquireReservation() {
         passengers: [],
       });
       setError(null);
+      // Update the user context to indicate that the user has reservations
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        hasReservations: true,
+      }));
     } catch (error) {
       console.error("Error creating reservation:", error);
       setError(error.message);
@@ -121,20 +134,21 @@ export default function InquireReservation() {
     <PageComponent
       buttons={
         <TButton color="indigo" to="/student/reservation/list">
-          <ArrowLeftEndOnRectangleIcon className="h-6 w-6 mr-2" /> Back to Reservation
+          <ArrowLeftEndOnRectangleIcon className="h-6 w-6 mr-2" /> Back to
+          Reservation
         </TButton>
       }
     >
       <ToastContainer />
       <Box sx={{ display: "flex", justifyContent: "center", m: 1, p: 1 }}>
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275 }} className="w-full max-w-md">
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="mb-10">
+              <div className="mb-4">
                 {error && <Alert severity="error">{error}</Alert>}
               </div>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Name"
@@ -168,7 +182,7 @@ export default function InquireReservation() {
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Reason"
@@ -190,7 +204,7 @@ export default function InquireReservation() {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Location"
@@ -200,7 +214,7 @@ export default function InquireReservation() {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Landmark"

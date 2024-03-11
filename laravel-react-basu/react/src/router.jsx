@@ -23,7 +23,6 @@ import Map from "./views/Map";
 import Trip from "./views/Trip";
 import ShuttleSelect from "./views/ShuttleSelect";
 import ServiceStart from "./views/ServiceStart";
-import InquireReservations from "./student/InquireReservations";
 
 // Define role constants
 const RoleRouteGuard = ({ allowedRoles, children }) => {

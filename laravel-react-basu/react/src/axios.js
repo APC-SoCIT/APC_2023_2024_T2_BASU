@@ -31,15 +31,6 @@ axiosClient.interceptors.response.use(
   }
 );
 
-// Function to generate UUID (Universally Unique Identifier)
-const generateUUID = () => {
-  // Generate a random UUID
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0,
-      v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-};
 
 // Function to get users
 export const getUsers = async () => {
@@ -213,5 +204,6 @@ export const getRegisteredStudents = async () => {
     throw error.response.data;
   }
 };
+
 
 export default axiosClient;
