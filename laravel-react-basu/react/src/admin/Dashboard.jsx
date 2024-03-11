@@ -97,7 +97,8 @@ export default function Dashboard() {
                   </p>
                   <div className="flex justify-center mt-2">
                     <div className="text-center text-xs font-mono text-gray-400 ">
-                      This are the amount of <br /><b>Registered</b> Shuttles
+                      This are the amount of <br />
+                      <b>Registered</b> Shuttles
                     </div>
                   </div>
                 </Paper>
@@ -109,8 +110,9 @@ export default function Dashboard() {
                     {onServiceShuttles}
                   </p>
                   <div className="flex justify-center mt-2">
-                  <div className="text-center text-xs font-mono text-gray-400 ">
-                      This are the amount of <br /><b>Available</b> Shuttles
+                    <div className="text-center text-xs font-mono text-gray-400 ">
+                      This are the amount of <br />
+                      <b>Available</b> Shuttles
                     </div>
                   </div>
                 </Paper>
@@ -122,8 +124,9 @@ export default function Dashboard() {
                     {onStandShuttles}
                   </p>
                   <div className="flex justify-center mt-2">
-                  <div className="text-center text-xs font-mono text-gray-400 ">
-                      This are the amount of <br /><b>Unavailable</b> Shuttles
+                    <div className="text-center text-xs font-mono text-gray-400 ">
+                      This are the amount of <br />
+                      <b>Unavailable</b> Shuttles
                     </div>
                   </div>
                 </Paper>
@@ -171,6 +174,18 @@ export default function Dashboard() {
                     ACCOUNT TABLE
                   </Button>
                 </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    href="/account/register"
+                    endIcon={<KeyIcon className="h-6 w-6" />}
+                    fullWidth
+                    className="mb-4"
+                  >
+                    REGISTER USER
+                  </Button>
+                </Grid>
               </Grid>
               <p className="text-center text-sm text-slate-400 mt-2">
                 Quick Links
@@ -196,12 +211,9 @@ export default function Dashboard() {
                     <TButton
                       className="text-center mb-2 lg:mr-2 lg:mb-0"
                       color="blue"
+                      to="/users"
                     >
                       Driver List
-                      <ArchiveBoxArrowDownIcon className="h-6 w-6 ml-4" />
-                    </TButton>
-                    <TButton className="text-center" color="indigo">
-                      Print Details
                       <ArchiveBoxArrowDownIcon className="h-6 w-6 ml-4" />
                     </TButton>
                   </div>
@@ -218,12 +230,9 @@ export default function Dashboard() {
                     <TButton
                       className="text-center mb-2 lg:mr-2 lg:mb-0"
                       color="indigo"
+                      to="/users"
                     >
                       Student List
-                      <ArchiveBoxArrowDownIcon className="h-6 w-6 ml-4" />
-                    </TButton>
-                    <TButton className="text-center" color="blue">
-                      Print Details
                       <ArchiveBoxArrowDownIcon className="h-6 w-6 ml-4" />
                     </TButton>
                   </div>

@@ -18,7 +18,7 @@ import TButton from "../components/core/TButton";
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export default function InquireReservation() {
-  const { currentUser, setCurrentUser } = useStateContext(); // Include setCurrentUser from context
+  const { currentUser, setCurrentUser } = useStateContext();
   const [formData, setFormData] = useState({
     name: currentUser.name,
     email: currentUser.email,
@@ -39,7 +39,6 @@ export default function InquireReservation() {
       try {
         const userList = await getUsers();
         const filteredUsers = userList.filter((user) => user.role === 2);
-        console.log("Users:", filteredUsers);
         setUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -67,45 +66,25 @@ export default function InquireReservation() {
   };
 
   const handlePassengerChange = (event, newValue) => {
-    // Filter out the current user from the newValue array
     const filteredPassengers = newValue.filter(
       (user) => user.id !== currentUser.id
     );
 
-    if (Array.isArray(newValue)) {
-      // If newValue is already an array, directly update the state
-      setFormData((prevData) => ({
-        ...prevData,
-        passengers: filteredPassengers,
-      }));
-    } else if (newValue !== null) {
-      // If newValue is not an array but not null, convert it to an array and update the state
-      setFormData((prevData) => ({
-        ...prevData,
-        passengers: [newValue], // Wrap single value in an array
-      }));
-    } else {
-      // If newValue is null, reset passengers to an empty array
-      setFormData((prevData) => ({
-        ...prevData,
-        passengers: [],
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      passengers: filteredPassengers,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Check if the user already has reservations
       if (currentUser.hasReservations) {
-        // If the user already has reservations, prevent them from creating another one
         toast.error("You can only create one reservation.");
         return;
       }
 
-      // If the user doesn't have reservations, proceed with creating the reservation
       const response = await postReservation(formData);
-      console.log("Reservation created:", response);
       toast.success("Reservation submitted");
       setFormData({
         name: currentUser.name,
@@ -119,7 +98,6 @@ export default function InquireReservation() {
         passengers: [],
       });
       setError(null);
-      // Update the user context to indicate that the user has reservations
       setCurrentUser((prevUser) => ({
         ...prevUser,
         hasReservations: true,
@@ -141,13 +119,13 @@ export default function InquireReservation() {
     >
       <ToastContainer />
       <Box sx={{ display: "flex", justifyContent: "center", m: 1, p: 1 }}>
-        <Card sx={{ minWidth: 275 }} className="w-full max-w-md">
+        <Card sx={{ width: "100%", maxWidth: 600 }}>
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                {error && <Alert severity="error">{error}</Alert>}
-              </div>
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  {error && <Alert severity="error">{error}</Alert>}
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
@@ -155,7 +133,6 @@ export default function InquireReservation() {
                     name="name"
                     variant="outlined"
                     value={formData.name}
-                    onChange={handleChange}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -224,7 +201,7 @@ export default function InquireReservation() {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                   <TextField
                     fullWidth
                     label="Start Time"
@@ -238,7 +215,7 @@ export default function InquireReservation() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                   <TextField
                     fullWidth
                     label="End Time"

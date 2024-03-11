@@ -66,8 +66,7 @@ export default function StudentReservation() {
             Welcome to the Student Reservation Overview!
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
-            This page displays a summary of your reservations. You can view,
-            edit, or delete your reservations here. If you have any inquiries or
+            This page displays a summary of your reservations. You can view and modify your reservations here. If you have any inquiries or
             need assistance, feel free to contact us.
           </p>
         </div>
