@@ -15,6 +15,7 @@ import {
   getRegisteredShuttles,
   getRegisteredStudents,
 } from "../axios";
+import * as XLSX from "xlsx";
 
 export default function Dashboard() {
   const [registeredShuttles, setRegisteredShuttles] = useState("loading");
@@ -43,6 +44,34 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     }
+  };
+
+  const exportToExcel = () => {
+    // Get current date
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(0, 10); // Format: YYYY-MM-DD
+
+    const data = [
+      ["Category", "Count"],
+      ["Registered Shuttles", registeredShuttles],
+      ["Registered Drivers", registeredDrivers],
+      ["Registered Students", registeredStudents],
+      ["Shuttles On Service", onServiceShuttles],
+      ["Shuttles On Stand By", onStandShuttles],
+      ["Download Date", formattedDate], // Add download date to data
+    ];
+
+    // Convert data to CSV format
+    const csvContent =
+      "data:text/csv;charset=utf-8," + data.map((e) => e.join(",")).join("\n");
+
+    // Create a download link and trigger the download
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `basu_${formattedDate}.csv`); // Dynamically generate filename with current date
+    document.body.appendChild(link);
+    link.click();
   };
 
   const animatedDiv = (children, delay) => (
@@ -244,7 +273,12 @@ export default function Dashboard() {
 
           {animatedDiv(
             <Paper elevation={10} className="rounded-lg p-4">
-              <Button variant="contained" color="primary" className="w-full">
+              <Button
+                variant="contained"
+                color="primary"
+                className="w-full"
+                onClick={exportToExcel}
+              >
                 Print Analytics
               </Button>
             </Paper>,
